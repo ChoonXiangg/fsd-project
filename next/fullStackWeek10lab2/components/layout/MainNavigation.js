@@ -17,18 +17,21 @@ function MainNavigation() {
 
 
   const contents = [
-    { title: 'All Properties', webAddress: '/' },
+    { title: 'Home', webAddress: '/' },
+    { title: 'All Properties', webAddress: '/properties' },
     { title: 'Add New Property', webAddress: '/new-property' },
   ]
   return (
     <header className={classes.header}>
       <HamMenuContent contents={contents} />
       <HamMenu toggleMenuHide={() => toggleMenuHide()} />
-      <HamMenuFAB toggleMenuHide={() => toggleMenuHide()} />
       <nav>
         <ul>
           <li>
-            <Link href='/'>All Properties</Link>
+            <Link href='/'>Home</Link>
+          </li>
+          <li>
+            <Link href='/properties'>All Properties</Link>
           </li>
           <li>
             <Link href='/new-property'>Add New Property</Link>
