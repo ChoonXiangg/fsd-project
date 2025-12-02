@@ -4,8 +4,9 @@ let router = express.Router();
 let Mongoose = require('mongoose').Mongoose;
 let Schema = require('mongoose').Schema;
 
+require('dotenv').config({ path: '../.env' });
 let oldMong = new Mongoose();
-oldMong.connect('mongodb://127.0.0.1:27017/db');
+oldMong.connect(process.env.MONGODB_URI);
 
 let meetingSchema = new Schema({
   meetingId: String,
