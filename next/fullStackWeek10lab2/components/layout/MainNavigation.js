@@ -12,45 +12,13 @@ function MainNavigation() {
   const router = useRouter()
 
   function toggleMenuHide() {
-    globalCtx.updateGlobals({cmd: 'hideHamMenu', newVal: false})
+    globalCtx.updateGlobals({ cmd: 'hideHamMenu', newVal: false })
   }
 
 
   const contents = [
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'},    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-    {title: 'Challenge: fix this!', webAddress: '/'}, 
-
+    { title: 'All Properties', webAddress: '/' },
+    { title: 'Add New Property', webAddress: '/new-property' },
   ]
   return (
     <header className={classes.header}>
@@ -60,10 +28,10 @@ function MainNavigation() {
       <nav>
         <ul>
           <li>
-            <Link href='/'>All Meetups</Link>
+            <Link href='/'>All Properties</Link>
           </li>
           <li>
-            <Link href='/new-meetup'>Add New Meetup</Link>
+            <Link href='/new-property'>Add New Property</Link>
           </li>
         </ul>
       </nav>

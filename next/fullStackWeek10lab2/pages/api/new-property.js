@@ -1,7 +1,7 @@
-// /api/new-meetup
+// /api/new-property
 
 async function handler(req, res) { // can be called anything you like
-  const response = await fetch('http://localhost:8000/getMeetings', {
+  const response = await fetch('http://localhost:8000/saveProperty', {
     method: 'POST',
     body: JSON.stringify(req.body),
     headers: {
@@ -13,3 +13,11 @@ async function handler(req, res) { // can be called anything you like
 }
 
 export default handler;
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '50mb',
+    },
+  },
+};

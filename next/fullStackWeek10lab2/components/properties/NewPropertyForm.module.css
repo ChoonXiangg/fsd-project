@@ -43,3 +43,38 @@
   background-color: #a50e48;
   border-color: #a50e48;
 }
+
+.dragDropZone {
+  border: 2px dashed #ccc;
+  border-radius: 4px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+  background-color: #f9f9f9;
+}
+
+.dragDropZone.dragActive {
+  border-color: #1a2920;
+  background-color: #e6ffe6;
+}
+
+.uploadLabel {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.previewImage {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+}
+
+.orText {
+  text-align: center;
+  margin: 0.5rem 0;
+  font-weight: bold;
+  color: #666;
+}
