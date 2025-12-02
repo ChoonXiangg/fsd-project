@@ -8,10 +8,16 @@ function PropertyList(props) {
         <PropertyItem
           key={property._id}
           id={property._id}
+          name={property.name}
           image={property.image}
-          title={property.title}
-          address={property.address}
+          city={property.city}
+          county={property.county}
           price={property.price}
+          propertyType={property.propertyType}
+          propertySubtype={property.propertySubtype}
+          bedrooms={property.bedrooms}
+          floorSize={property.floorSize}
+          verifiedAgent={property.verifiedAgent}
         />
       ))}
     </ul>

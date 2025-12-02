@@ -2,20 +2,25 @@ import { useRef, useState } from 'react';
 
 import Card from '../ui/Card';
 import classes from './NewPropertyForm.module.css';
+import { counties, cities, propertyTypes, bedroomOptions } from '../../data/irelandLocations';
 
 function NewPropertyForm(props) {
-  const titleInputRef = useRef();
+  const nameInputRef = useRef();
   const addressInputRef = useRef();
   const priceInputRef = useRef();
-  const bedroomsInputRef = useRef();
-  const bathroomsInputRef = useRef();
-  const descriptionInputRef = useRef();
+  const floorSizeInputRef = useRef();
 
-  // State for image handling
+  // State for form fields
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
+  const [propertyType, setPropertyType] = useState('Residential');
+  const [propertySubtype, setPropertySubtype] = useState('');
+  const [city, setCity] = useState('');
+  const [county, setCounty] = useState('');
+  const [bedrooms, setBedrooms] = useState('');
+  const [verifiedAgent, setVerifiedAgent] = useState(false);
 
   function handleDrag(e) {
     e.preventDefault();
@@ -48,7 +53,7 @@ function NewPropertyForm(props) {
     const reader = new FileReader();
     reader.onloadend = () => {
       setImagePreview(reader.result);
-      setImageUrl(''); // Clear URL input if file is dropped
+      setImageUrl('');
     };
     reader.readAsDataURL(file);
   }
@@ -59,27 +64,36 @@ function NewPropertyForm(props) {
     setImageFile(null);
   }
 
+  function handlePropertyTypeChange(e) {
+    setPropertyType(e.target.value);
+    setPropertySubtype('');
+    if (e.target.value === 'Commercial') {
+      setBedrooms('');
+    }
+  }
+
   function submitHandler(event) {
     event.preventDefault();
 
-    const enteredTitle = titleInputRef.current.value;
+    const enteredName = nameInputRef.current.value;
     const enteredAddress = addressInputRef.current.value;
     const enteredPrice = priceInputRef.current.value;
-    const enteredBedrooms = bedroomsInputRef.current.value;
-    const enteredBathrooms = bathroomsInputRef.current.value;
-    const enteredDescription = descriptionInputRef.current.value;
+    const enteredFloorSize = floorSizeInputRef.current.value;
 
-    // Use imagePreview (Base64) if file uploaded, otherwise use entered URL
     const finalImage = imagePreview || imageUrl;
 
     const propertyData = {
-      title: enteredTitle,
+      name: enteredName,
       image: finalImage,
       address: enteredAddress,
+      city: city,
+      county: county,
       price: enteredPrice,
-      bedrooms: enteredBedrooms,
-      bathrooms: enteredBathrooms,
-      description: enteredDescription,
+      propertyType: propertyType,
+      propertySubtype: propertySubtype,
+      bedrooms: propertyType === 'Residential' ? bedrooms : '',
+      verifiedAgent: verifiedAgent,
+      floorSize: enteredFloorSize,
     };
 
     props.onAddProperty(propertyData);
@@ -89,8 +103,8 @@ function NewPropertyForm(props) {
     <Card>
       <form className={classes.form} onSubmit={submitHandler}>
         <div className={classes.control}>
-          <label htmlFor='title'>Property Title</label>
-          <input type='text' required id='title' ref={titleInputRef} />
+          <label htmlFor='name'>Property Name</label>
+          <input type='text' required id='name' ref={nameInputRef} />
         </div>
 
         <div className={classes.control}>
@@ -124,35 +138,101 @@ function NewPropertyForm(props) {
             placeholder="Enter Image URL"
             value={imageUrl}
             onChange={handleUrlChange}
-            required={!imagePreview} // Required only if no file is selected
+            required={!imagePreview}
           />
         </div>
 
         <div className={classes.control}>
-          <label htmlFor='address'>Address</label>
+          <label htmlFor='address'>Street Address</label>
           <input type='text' required id='address' ref={addressInputRef} />
         </div>
+
         <div className={classes.control}>
-          <label htmlFor='price'>Price</label>
+          <label htmlFor='city'>City</label>
+          <select id='city' required value={city} onChange={(e) => setCity(e.target.value)}>
+            <option value="">Select City</option>
+            {cities.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className={classes.control}>
+          <label htmlFor='county'>County</label>
+          <select id='county' required value={county} onChange={(e) => setCounty(e.target.value)}>
+            <option value="">Select County</option>
+            {counties.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className={classes.control}>
+          <label htmlFor='price'>Price (€)</label>
           <input type='number' required id='price' ref={priceInputRef} />
         </div>
+
         <div className={classes.control}>
-          <label htmlFor='bedrooms'>Bedrooms</label>
-          <input type='number' required id='bedrooms' ref={bedroomsInputRef} />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor='bathrooms'>Bathrooms</label>
-          <input type='number' required id='bathrooms' ref={bathroomsInputRef} />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor='description'>Description</label>
-          <textarea
-            id='description'
+          <label htmlFor='propertyType'>Property Type</label>
+          <select
+            id='propertyType'
             required
-            rows='5'
-            ref={descriptionInputRef}
-          ></textarea>
+            value={propertyType}
+            onChange={handlePropertyTypeChange}
+          >
+            <option value="Residential">Residential</option>
+            <option value="Commercial">Commercial</option>
+          </select>
         </div>
+
+        <div className={classes.control}>
+          <label htmlFor='propertySubtype'>Property Subtype</label>
+          <select
+            id='propertySubtype'
+            required
+            value={propertySubtype}
+            onChange={(e) => setPropertySubtype(e.target.value)}
+          >
+            <option value="">Select Subtype</option>
+            {propertyTypes[propertyType].map((subtype) => (
+              <option key={subtype} value={subtype}>{subtype}</option>
+            ))}
+          </select>
+        </div>
+
+        {propertyType === 'Residential' && (
+          <div className={classes.control}>
+            <label htmlFor='bedrooms'>Bedrooms</label>
+            <select
+              id='bedrooms'
+              required
+              value={bedrooms}
+              onChange={(e) => setBedrooms(e.target.value)}
+            >
+              <option value="">Select Bedrooms</option>
+              {bedroomOptions.map((option) => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <div className={classes.control}>
+          <label htmlFor='floorSize'>Floor Size (m²)</label>
+          <input type='number' required id='floorSize' ref={floorSizeInputRef} />
+        </div>
+
+        <div className={classes.control}>
+          <label className={classes.checkboxLabel}>
+            <input
+              type='checkbox'
+              checked={verifiedAgent}
+              onChange={(e) => setVerifiedAgent(e.target.checked)}
+            />
+            Verified Agent Listing
+          </label>
+        </div>
+
         <div className={classes.actions}>
           <button>Add Property</button>
         </div>

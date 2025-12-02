@@ -7,22 +7,24 @@ export default function () {
     const globalCtx = useContext(GlobalContext)
     const router = useRouter();
 
-    // Back to basics, a simple for loop. Also trim() comes into play as it usually does!
     let returnVal = null
     for (let ii = 0; ii < globalCtx.theGlobalObject.properties.length; ii++) {
         let temp = globalCtx.theGlobalObject.properties[ii]
         if (temp._id && router.query.propertyId && temp._id.trim() == router.query.propertyId.trim()) {
             returnVal = <PropertyDetail
+                name={temp.name}
                 image={temp.image}
-                title={temp.title}
-                description={temp.description}
                 address={temp.address}
+                city={temp.city}
+                county={temp.county}
                 price={temp.price}
+                propertyType={temp.propertyType}
+                propertySubtype={temp.propertySubtype}
                 bedrooms={temp.bedrooms}
-                bathrooms={temp.bathrooms}
+                floorSize={temp.floorSize}
+                verifiedAgent={temp.verifiedAgent}
             />
         }
     }
-    // In the real world, we'd put the code above in the store context module. 
     return returnVal
 }
