@@ -48,7 +48,7 @@ export function GlobalContextProvider(props) {
             const data = await response.json(); // Should check here that it worked OK
             setGlobals((previousGlobals) => {
                 const newGlobals = JSON.parse(JSON.stringify(previousGlobals))
-                newGlobals.properties.push(command.newVal); return newGlobals
+                newGlobals.properties.push(data); return newGlobals
             })
         }
     }
