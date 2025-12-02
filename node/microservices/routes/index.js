@@ -8,47 +8,48 @@ require('dotenv').config({ path: '../.env' });
 let oldMong = new Mongoose();
 oldMong.connect(process.env.MONGODB_URI);
 
-let meetingSchema = new Schema({
-  meetingId: String,
+let propertySchema = new Schema({
   title: String,
   image: String,
   address: String,
-  description: String
-}, { collection: 'meetings' });
+  price: Number,
+  description: String,
+  bedrooms: Number,
+  bathrooms: Number
+}, { collection: 'properties' });
 
-let meetings = oldMong.model('meetings', meetingSchema);
+let properties = oldMong.model('properties', propertySchema);
 
 router.get('/', async function (req, res, next) {
-  const meetings = await getMeetings();
   res.render('index');
 });
 
-router.post('/getMeetings', async function (req, res, next) {
-  const meetings = await getMeetings();
-  res.json(meetings);
+router.post('/getProperties', async function (req, res, next) {
+  const allProperties = await getProperties();
+  res.json(allProperties);
 });
 
-async function getMeetings() {
-  data = await meetings.find().lean();
-  return { meetings: data };
+async function getProperties() {
+  data = await properties.find().lean();
+  return { properties: data };
 }
 
-router.post('/saveMeeting', async function (req, res, next) {
-  const meetings = await saveMeeting(req.body);
-  res.json(meetings);
+router.post('/saveProperty', async function (req, res, next) {
+  const result = await saveProperty(req.body);
+  res.json(result);
 });
 
-async function saveMeeting(theMeeting) {
-  console.log('theMeeting: ' + theMeeting);
-  await meetings.create(theMeeting,
+async function saveProperty(theProperty) {
+  console.log('theProperty: ', theProperty);
+  await properties.create(theProperty,
     function (err, res) {
       if (err) {
-        console.log('Could not insert new meeting')
-        return { saveMeetingResponse: "fail" };
+        console.log('Could not insert new property')
+        return { savePropertyResponse: "fail" };
       }
     }
   )
-  return { saveMeetingResponse: "success" };
+  return { savePropertyResponse: "success" };
 }
 
 module.exports = router;

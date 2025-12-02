@@ -1,8 +1,8 @@
 import Card from '../ui/Card';
-import classes from './MeetupItem.module.css';
+import classes from './PropertyItem.module.css';
 import { useRouter } from 'next/router';
 
-function MeetupItem(props) {
+function PropertyItem(props) {
   const router = useRouter();
 
   function showDetailsHandler() {
@@ -18,6 +18,7 @@ function MeetupItem(props) {
         <div className={classes.content}>
           <h3>{props.title}</h3>
           <address>{props.address}</address>
+          <p>${props.price}</p>
         </div>
         <div className={classes.actions}>
           <button onClick={showDetailsHandler}>Show Details</button>
@@ -27,4 +28,4 @@ function MeetupItem(props) {
   );
 }
 
-export default MeetupItem;
+export default PropertyItem;

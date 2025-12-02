@@ -9,22 +9,22 @@ import { createContext, useState, useEffect } from 'react'
 const GlobalContext = createContext()
 
 export function GlobalContextProvider(props) {
-    const [globals, setGlobals] = useState({ aString: 'init val', count: 0, hideHamMenu: true, meetings: [], dataLoaded: false })
+    const [globals, setGlobals] = useState({ aString: 'init val', count: 0, hideHamMenu: true, properties: [], dataLoaded: false })
 
     useEffect(() => {
-        getAllMeetings()
+        getAllProperties()
     }, []);
 
-    async function getAllMeetings() {
-        const response = await fetch('/api/get-meetings', {
+    async function getAllProperties() {
+        const response = await fetch('/api/get-properties', {
             method: 'POST',
-            body: JSON.stringify({ meetups: 'all' }),
+            body: JSON.stringify({ properties: 'all' }),
             headers: {
                 'Content-Type': 'application/json'
             }
         });
         let data = await response.json();
-        setGlobals((previousGlobals) => { const newGlobals = JSON.parse(JSON.stringify(previousGlobals)); newGlobals.meetings = data.meetings; newGlobals.dataLoaded = true; return newGlobals })
+        setGlobals((previousGlobals) => { const newGlobals = JSON.parse(JSON.stringify(previousGlobals)); newGlobals.properties = data.properties; newGlobals.dataLoaded = true; return newGlobals })
     }
 
     async function editGlobalData(command) { // {cmd: someCommand, newVal: 'new text'}
@@ -37,8 +37,8 @@ export function GlobalContextProvider(props) {
                 newGlobals.hideHamMenu = command.newVal; return newGlobals
             })
         }
-        if (command.cmd == 'addMeeting') {
-            const response = await fetch('/api/new-meetup', {
+        if (command.cmd == 'addProperty') {
+            const response = await fetch('/api/new-property', {
                 method: 'POST',
                 body: JSON.stringify(command.newVal),
                 headers: {
@@ -48,7 +48,7 @@ export function GlobalContextProvider(props) {
             const data = await response.json(); // Should check here that it worked OK
             setGlobals((previousGlobals) => {
                 const newGlobals = JSON.parse(JSON.stringify(previousGlobals))
-                newGlobals.meetings.push(command.newVal); return newGlobals
+                newGlobals.properties.push(command.newVal); return newGlobals
             })
         }
     }
