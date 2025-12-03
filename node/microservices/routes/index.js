@@ -22,7 +22,16 @@ let propertySchema = new Schema({
   floorSize: Number // in square meters or square feet
 }, { collection: 'properties' });
 
+let userSchema = new Schema({
+  username: String,
+  email: { type: String, unique: true, required: true },
+  password: String,
+  phoneNumber: String,
+  verifiedAgent: Boolean
+}, { collection: 'users' });
+
 let properties = oldMong.model('properties', propertySchema);
+let users = oldMong.model('users', userSchema);
 
 router.get('/', async function (req, res, next) {
   res.render('index');
@@ -48,5 +57,107 @@ async function saveProperty(theProperty) {
   const savedProperty = await properties.create(theProperty);
   return savedProperty;
 }
+
+router.post('/signup', async function (req, res, next) {
+  try {
+    const { username, email, password, phoneNumber, verifiedAgent } = req.body;
+
+    // Check if email already exists
+    const existingUser = await users.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already exists' });
+    }
+
+    // Create new user
+    const newUser = await users.create({
+      username,
+      email,
+      password,
+      phoneNumber,
+      verifiedAgent: verifiedAgent || false
+    });
+
+    res.status(201).json({
+      message: 'User created successfully',
+      user: {
+        id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+        phoneNumber: newUser.phoneNumber,
+        verifiedAgent: newUser.verifiedAgent
+      }
+    });
+  } catch (error) {
+    console.error('Signup error:', error);
+    res.status(500).json({ message: 'Error creating user' });
+  }
+});
+
+router.post('/login', async function (req, res, next) {
+  try {
+    const { email, password } = req.body;
+
+    // Find user by email
+    const user = await users.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    // Check password
+    if (user.password !== password) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    res.status(200).json({
+      message: 'Login successful',
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        verifiedAgent: user.verifiedAgent
+      }
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Error logging in' });
+  }
+});
+
+router.put('/update-profile', async function (req, res, next) {
+  try {
+    const { userId, username, phoneNumber } = req.body;
+
+    console.log('Update profile request:', { userId, username, phoneNumber });
+
+    // Find user first
+    const user = await users.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update user fields
+    user.username = username;
+    user.phoneNumber = phoneNumber;
+
+    // Save the updated user
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+      message: 'Profile updated successfully',
+      user: {
+        id: updatedUser._id,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        phoneNumber: updatedUser.phoneNumber,
+        verifiedAgent: updatedUser.verifiedAgent
+      }
+    });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    console.error('Error details:', error.message);
+    res.status(500).json({ message: 'Error updating profile', error: error.message });
+  }
+});
 
 module.exports = router;
