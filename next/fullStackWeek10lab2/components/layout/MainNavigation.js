@@ -20,11 +20,17 @@ function MainNavigation() {
     { title: 'Home', webAddress: '/' },
     { title: 'All Properties', webAddress: '/properties' },
     { title: 'Add New Property', webAddress: '/new-property' },
+    { title: 'Profile', webAddress: '/profile' },
   ]
   return (
     <header className={classes.header}>
       <HamMenuContent contents={contents} />
       <HamMenu toggleMenuHide={() => toggleMenuHide()} />
+      {globalCtx.theGlobalObject.user && (
+        <div className={classes.userGreeting}>
+          Hi, {globalCtx.theGlobalObject.user.username}
+        </div>
+      )}
       <nav>
         <ul>
           <li>

@@ -9,7 +9,7 @@ import { createContext, useState, useEffect } from 'react'
 const GlobalContext = createContext()
 
 export function GlobalContextProvider(props) {
-    const [globals, setGlobals] = useState({ aString: 'init val', count: 0, hideHamMenu: true, properties: [], dataLoaded: false })
+    const [globals, setGlobals] = useState({ aString: 'init val', count: 0, hideHamMenu: true, properties: [], dataLoaded: false, user: null })
 
     useEffect(() => {
         getAllProperties()
@@ -49,6 +49,13 @@ export function GlobalContextProvider(props) {
             setGlobals((previousGlobals) => {
                 const newGlobals = JSON.parse(JSON.stringify(previousGlobals))
                 newGlobals.properties.push(data); return newGlobals
+            })
+        }
+        if (command.cmd == 'setUser') { // {cmd: 'setUser', newVal: {username, email, etc}}
+            setGlobals((previousGlobals) => {
+                const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
+                newGlobals.user = command.newVal;
+                return newGlobals;
             })
         }
     }
