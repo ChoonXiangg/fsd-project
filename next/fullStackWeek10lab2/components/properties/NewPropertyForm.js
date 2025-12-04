@@ -1,10 +1,12 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useContext } from 'react';
+import GlobalContext from '../../pages/store/globalContext';
 
 import Card from '../ui/Card';
 import classes from './NewPropertyForm.module.css';
 import { counties, cities, propertyTypes, bedroomOptions } from '../../data/irelandLocations';
 
 function NewPropertyForm(props) {
+  const globalCtx = useContext(GlobalContext);
   const nameInputRef = useRef();
   const addressInputRef = useRef();
   const priceInputRef = useRef();
@@ -20,7 +22,6 @@ function NewPropertyForm(props) {
   const [city, setCity] = useState('');
   const [county, setCounty] = useState('');
   const [bedrooms, setBedrooms] = useState('');
-  const [verifiedAgent, setVerifiedAgent] = useState(false);
 
   function handleDrag(e) {
     e.preventDefault();
@@ -82,6 +83,8 @@ function NewPropertyForm(props) {
 
     const finalImage = imagePreview || imageUrl;
 
+    const user = globalCtx.theGlobalObject.user;
+
     const propertyData = {
       name: enteredName,
       image: finalImage,
@@ -92,8 +95,12 @@ function NewPropertyForm(props) {
       propertyType: propertyType,
       propertySubtype: propertySubtype,
       bedrooms: propertyType === 'Residential' ? bedrooms : '',
-      verifiedAgent: verifiedAgent,
+      verifiedAgent: user?.verifiedAgent || false,
       floorSize: enteredFloorSize,
+      creatorId: user?.id || null,
+      creatorUsername: user?.username || 'Unknown',
+      creatorEmail: user?.email || '',
+      creatorPhoneNumber: user?.phoneNumber || ''
     };
 
     props.onAddProperty(propertyData);
@@ -220,17 +227,6 @@ function NewPropertyForm(props) {
         <div className={classes.control}>
           <label htmlFor='floorSize'>Floor Size (m²)</label>
           <input type='number' required id='floorSize' ref={floorSizeInputRef} />
-        </div>
-
-        <div className={classes.control}>
-          <label className={classes.checkboxLabel}>
-            <input
-              type='checkbox'
-              checked={verifiedAgent}
-              onChange={(e) => setVerifiedAgent(e.target.checked)}
-            />
-            Verified Agent Listing
-          </label>
         </div>
 
         <div className={classes.actions}>

@@ -20,7 +20,11 @@ let propertySchema = new Schema({
   propertySubtype: String, // Depends on propertyType
   bedrooms: String, // 'Studio', '1', '2', '3', '4', '5+' (only for residential)
   verifiedAgent: Boolean,
-  floorSize: Number // in square meters or square feet
+  floorSize: Number, // in square meters or square feet
+  creatorId: String,
+  creatorUsername: String,
+  creatorEmail: String,
+  creatorPhoneNumber: String
 }, { collection: 'properties' });
 
 let userSchema = new Schema({
