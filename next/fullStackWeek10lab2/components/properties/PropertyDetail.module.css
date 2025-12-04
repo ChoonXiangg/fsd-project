@@ -33,3 +33,38 @@
     color: #1a2920;
     margin: 1rem 0;
 }
+
+.creatorInfo {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: #f9fafb;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.creatorInfo h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #1a2920;
+    font-size: 1.3rem;
+}
+
+.listedBy {
+    font-weight: bold;
+    color: #1a2920;
+    margin-bottom: 0.5rem;
+}
+
+.creatorInfo p {
+    margin: 0.5rem 0;
+    color: #4b5563;
+}
+
+.creatorInfo a {
+    color: #77002e;
+    text-decoration: none;
+}
+
+.creatorInfo a:hover {
+    text-decoration: underline;
+}

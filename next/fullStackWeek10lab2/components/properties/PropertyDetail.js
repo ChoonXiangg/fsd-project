@@ -13,6 +13,13 @@ function PropertyDetail(props) {
             <p className={classes.price}>€{Number(props.price).toLocaleString()}</p>
             {props.bedrooms && <p>Bedrooms: {props.bedrooms}</p>}
             <p>Floor Size: {props.floorSize} m²</p>
+
+            <div className={classes.creatorInfo}>
+                <h3>Contact Information</h3>
+                <p className={classes.listedBy}>Listed by: {props.creatorUsername}</p>
+                <p>Email: <a href={`mailto:${props.creatorEmail}`}>{props.creatorEmail}</a></p>
+                <p>Phone: <a href={`tel:${props.creatorPhoneNumber}`}>{props.creatorPhoneNumber}</a></p>
+            </div>
         </section>
     )
 }
