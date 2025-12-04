@@ -23,6 +23,7 @@ export default function () {
                 bedrooms={temp.bedrooms}
                 floorSize={temp.floorSize}
                 verifiedAgent={temp.verifiedAgent}
+                creatorId={temp.creatorId}
                 creatorUsername={temp.creatorUsername}
                 creatorEmail={temp.creatorEmail}
                 creatorPhoneNumber={temp.creatorPhoneNumber}
