@@ -12,6 +12,7 @@ export default function () {
         let temp = globalCtx.theGlobalObject.properties[ii]
         if (temp._id && router.query.propertyId && temp._id.trim() == router.query.propertyId.trim()) {
             returnVal = <PropertyDetail
+                propertyId={temp._id}
                 name={temp.name}
                 image={temp.image}
                 address={temp.address}
@@ -27,6 +28,7 @@ export default function () {
                 creatorUsername={temp.creatorUsername}
                 creatorEmail={temp.creatorEmail}
                 creatorPhoneNumber={temp.creatorPhoneNumber}
+                starredBy={temp.starredBy || []}
             />
         }
     }

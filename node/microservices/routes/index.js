@@ -24,7 +24,8 @@ let propertySchema = new Schema({
   creatorId: String,
   creatorUsername: String,
   creatorEmail: String,
-  creatorPhoneNumber: String
+  creatorPhoneNumber: String,
+  starredBy: [String] // Array of user IDs who have starred this property
 }, { collection: 'properties' });
 
 let userSchema = new Schema({
@@ -223,6 +224,49 @@ router.put('/update-profile', async function (req, res, next) {
     console.error('Update profile error:', error);
     console.error('Error details:', error.message);
     res.status(500).json({ message: 'Error updating profile', error: error.message });
+  }
+});
+
+router.post('/toggle-star', async function (req, res, next) {
+  try {
+    const { userId, propertyId } = req.body;
+
+    if (!userId || !propertyId) {
+      return res.status(400).json({ message: 'User ID and Property ID are required' });
+    }
+
+    // Find the property
+    const property = await properties.findById(propertyId);
+    if (!property) {
+      return res.status(404).json({ message: 'Property not found' });
+    }
+
+    // Initialize starredBy array if it doesn't exist
+    if (!property.starredBy) {
+      property.starredBy = [];
+    }
+
+    // Toggle: if user has starred, unstar it; if not starred, star it
+    const isCurrentlyStarred = property.starredBy.includes(userId);
+
+    if (isCurrentlyStarred) {
+      // Unstar: remove user from array
+      property.starredBy = property.starredBy.filter(id => id !== userId);
+    } else {
+      // Star: add user to array
+      property.starredBy.push(userId);
+    }
+
+    await property.save();
+
+    res.status(200).json({
+      message: isCurrentlyStarred ? 'Property unstarred successfully' : 'Property starred successfully',
+      isStarred: !isCurrentlyStarred,
+      starredBy: property.starredBy
+    });
+  } catch (error) {
+    console.error('Toggle star error:', error);
+    res.status(500).json({ message: 'Error toggling star', error: error.message });
   }
 });
 
