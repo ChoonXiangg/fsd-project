@@ -121,6 +121,10 @@ export function GlobalContextProvider(props) {
                 return newGlobals;
             })
         }
+        if (command.cmd == 'fetchPropertiesFromDB') {
+            // Re-fetch all properties from the database
+            await getAllProperties();
+        }
     }
 
     const context = {

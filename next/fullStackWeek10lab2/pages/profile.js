@@ -16,6 +16,14 @@ function ProfilePage() {
     );
   }, [user, globalCtx.theGlobalObject.properties]);
 
+  // Filter properties starred by this user
+  const starredProperties = useMemo(() => {
+    if (!user || !globalCtx.theGlobalObject.properties) return [];
+    return globalCtx.theGlobalObject.properties.filter(
+      property => property.starredBy && property.starredBy.includes(user.id)
+    );
+  }, [user, globalCtx.theGlobalObject.properties]);
+
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({
     username: user?.username || '',
@@ -167,6 +175,43 @@ function ProfilePage() {
         ) : (
           <div className={classes.propertiesGrid}>
             {userProperties.map((property) => (
+              <div
+                key={property._id}
+                className={classes.propertyCard}
+                onClick={() => router.push(`/${property._id}`)}
+              >
+                <div className={classes.propertyImage}>
+                  <img src={property.image} alt={property.name} />
+                  {property.verifiedAgent && (
+                    <span className={classes.verifiedBadge}>✓ Verified</span>
+                  )}
+                </div>
+                <div className={classes.propertyInfo}>
+                  <h3 className={classes.propertyName}>{property.name}</h3>
+                  <p className={classes.propertyType}>
+                    {property.propertyType} - {property.propertySubtype}
+                  </p>
+                  <p className={classes.propertyLocation}>
+                    {property.city}, {property.county}
+                  </p>
+                  <p className={classes.propertyPrice}>
+                    €{Number(property.price).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Starred Properties Section */}
+      <div className={classes.propertiesSection}>
+        <h2 className={classes.propertiesTitle}>⭐ Starred Properties</h2>
+        {starredProperties.length === 0 ? (
+          <p className={classes.noProperties}>You haven't starred any properties yet.</p>
+        ) : (
+          <div className={classes.propertiesGrid}>
+            {starredProperties.map((property) => (
               <div
                 key={property._id}
                 className={classes.propertyCard}
