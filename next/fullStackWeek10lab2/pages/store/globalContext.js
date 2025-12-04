@@ -13,6 +13,7 @@ export function GlobalContextProvider(props) {
 
     useEffect(() => {
         getAllProperties()
+        checkAuthToken() // Check for existing JWT token on app load
     }, []);
 
     async function getAllProperties() {
@@ -25,6 +26,49 @@ export function GlobalContextProvider(props) {
         });
         let data = await response.json();
         setGlobals((previousGlobals) => { const newGlobals = JSON.parse(JSON.stringify(previousGlobals)); newGlobals.properties = data.properties; newGlobals.dataLoaded = true; return newGlobals })
+    }
+
+    async function checkAuthToken() {
+        // Check if JWT token exists in localStorage
+        const token = localStorage.getItem('authToken');
+        console.log('Checking auth token on app load:', token ? 'Token found' : 'No token');
+
+        if (!token) {
+            return; // No token found, user stays logged out
+        }
+
+        try {
+            // Verify token with backend
+            console.log('Verifying token with backend...');
+            const response = await fetch('/api/auth/verify-token', {
+                method: 'POST',
+                body: JSON.stringify({ token }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('Token verification response status:', response.status);
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Token valid! Restoring user:', data.user);
+                // Token is valid, restore user to context
+                setGlobals((previousGlobals) => {
+                    const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
+                    newGlobals.user = data.user;
+                    return newGlobals;
+                });
+            } else {
+                const errorData = await response.json();
+                console.log('Token invalid:', errorData);
+                // Token is invalid or expired, remove it
+                localStorage.removeItem('authToken');
+            }
+        } catch (error) {
+            console.error('Error verifying token:', error);
+            localStorage.removeItem('authToken');
+        }
     }
 
     async function editGlobalData(command) { // {cmd: someCommand, newVal: 'new text'}
@@ -51,10 +95,29 @@ export function GlobalContextProvider(props) {
                 newGlobals.properties.push(data); return newGlobals
             })
         }
-        if (command.cmd == 'setUser') { // {cmd: 'setUser', newVal: {username, email, etc}}
+        if (command.cmd == 'setUser') { // {cmd: 'setUser', user: {username, email, etc}, token: 'jwt-token'}
+            // Store JWT token in localStorage if provided
+            if (command.token) {
+                console.log('Storing JWT token in localStorage');
+                localStorage.setItem('authToken', command.token);
+            } else {
+                console.log('No token provided - keeping existing token (profile update)');
+                // No token means this is a profile update, keep existing token
+            }
+
             setGlobals((previousGlobals) => {
                 const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
-                newGlobals.user = command.newVal;
+                newGlobals.user = command.user;
+                return newGlobals;
+            })
+        }
+        if (command.cmd == 'logout') {
+            // Remove JWT token from localStorage
+            localStorage.removeItem('authToken');
+
+            setGlobals((previousGlobals) => {
+                const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
+                newGlobals.user = null;
                 return newGlobals;
             })
         }

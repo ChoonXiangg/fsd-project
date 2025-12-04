@@ -30,5 +30,22 @@
     padding: 10px;
     border: 1px solid gray;
     font-size: 20px;
+    cursor: pointer;
 }
 
+.menuItem:hover {
+    background-color: #f0f0f0;
+}
+
+.logoutItem {
+    color: #dc2626;
+    padding: 10px;
+    border: 1px solid gray;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.logoutItem:hover {
+    background-color: #fee2e2;
+}

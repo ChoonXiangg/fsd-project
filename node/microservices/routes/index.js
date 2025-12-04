@@ -1,5 +1,6 @@
 let express = require('express');
 let router = express.Router();
+let jwt = require('jsonwebtoken');
 
 let Mongoose = require('mongoose').Mongoose;
 let Schema = require('mongoose').Schema;
@@ -77,8 +78,19 @@ router.post('/signup', async function (req, res, next) {
       verifiedAgent: verifiedAgent || false
     });
 
+    // Create JWT token for new user
+    const token = jwt.sign(
+      {
+        userId: newUser._id,
+        email: newUser.email
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
     res.status(201).json({
       message: 'User created successfully',
+      token: token,
       user: {
         id: newUser._id,
         username: newUser.username,
@@ -108,8 +120,19 @@ router.post('/login', async function (req, res, next) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
+    // Create JWT token
+    const token = jwt.sign(
+      {
+        userId: user._id,
+        email: user.email
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' } // Token expires in 7 days
+    );
+
     res.status(200).json({
       message: 'Login successful',
+      token: token,
       user: {
         id: user._id,
         username: user.username,
@@ -121,6 +144,45 @@ router.post('/login', async function (req, res, next) {
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Error logging in' });
+  }
+});
+
+router.post('/verify-token', async function (req, res, next) {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(401).json({ message: 'No token provided' });
+    }
+
+    // Verify JWT token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Find user by ID from token
+    const user = await users.findById(decoded.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({
+      message: 'Token valid',
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        verifiedAgent: user.verifiedAgent
+      }
+    });
+  } catch (error) {
+    console.error('Token verification error:', error);
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Token expired' });
+    }
+    res.status(500).json({ message: 'Error verifying token' });
   }
 });
 

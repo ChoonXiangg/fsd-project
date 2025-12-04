@@ -64,7 +64,8 @@ function ProfilePage() {
       const data = await response.json();
 
       if (response.ok) {
-        globalCtx.updateGlobals({ cmd: 'setUser', newVal: data.user });
+        // Update user without token (token remains in localStorage)
+        globalCtx.updateGlobals({ cmd: 'setUser', user: data.user });
         setSuccess('Profile updated successfully!');
         setIsEditing(false);
       } else {
