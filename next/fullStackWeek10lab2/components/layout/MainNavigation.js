@@ -2,14 +2,16 @@ import classes from './MainNavigation.module.css'
 import Link from 'next/link'
 import HamMenu from "../generic/HamMenu"
 import HamMenuFAB from "../generic/HamMenuFAB"
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import GlobalContext from "../../pages/store/globalContext"
 import HamMenuContent from "./HamMenuContent"
 import { useRouter } from 'next/router'
+import { counties, cities } from '../../data/irelandLocations'
 
 function MainNavigation() {
   const globalCtx = useContext(GlobalContext)
   const router = useRouter()
+  const [showDropdown, setShowDropdown] = useState(false)
 
   function toggleMenuHide() {
     globalCtx.updateGlobals({ cmd: 'hideHamMenu', newVal: false })
@@ -41,8 +43,54 @@ function MainNavigation() {
           <li>
             <Link href='/'>Home</Link>
           </li>
-          <li>
+          <li
+            className={classes.dropdownContainer}
+            onMouseEnter={() => setShowDropdown(true)}
+            onMouseLeave={() => setShowDropdown(false)}
+          >
             <Link href='/properties'>All Properties</Link>
+            {showDropdown && (
+              <div className={classes.dropdownMenu}>
+                <div className={classes.dropdownColumn}>
+                  <h3>Locations</h3>
+                  <ul>
+                    {cities.slice(0, 5).map((city) => (
+                      <li key={city}>
+                        <Link href={`/properties?city=${city}`}>{city}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                  <Link href='/properties' className={classes.viewAll}>
+                    View All Locations →
+                  </Link>
+                </div>
+
+                <div className={classes.dropdownColumn}>
+                  <h3>Property Type</h3>
+                  <ul>
+                    <li><Link href='/properties?type=Residential&subtype=Apartment'>Apartments</Link></li>
+                    <li><Link href='/properties?type=Residential&subtype=Bungalow'>Bungalows</Link></li>
+                    <li><Link href='/properties?type=Residential&subtype=Semi-Detached House'>Semi-Detached Houses</Link></li>
+                    <li><Link href='/properties?type=Residential&subtype=Terrace'>Terraced Houses</Link></li>
+                    <li><Link href='/properties?type=Commercial'>Commercial</Link></li>
+                  </ul>
+                </div>
+
+                <div className={classes.dropdownColumn}>
+                  <h3>Counties</h3>
+                  <ul>
+                    {counties.slice(0, 5).map((county) => (
+                      <li key={county}>
+                        <Link href={`/properties?county=${county}`}>{county}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                  <Link href='/properties' className={classes.viewAll}>
+                    View All Counties →
+                  </Link>
+                </div>
+              </div>
+            )}
           </li>
           <li>
             <Link href='/new-property'>Add New Property</Link>

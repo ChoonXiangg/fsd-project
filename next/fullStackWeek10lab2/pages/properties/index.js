@@ -2,7 +2,7 @@ import PropertyList from '../../components/properties/PropertyList'
 import { useContext, useEffect, useState } from "react";
 import GlobalContext from "../store/globalContext"
 import { useRouter } from 'next/router';
-import { propertyTypes, bedroomOptions } from '../../data/irelandLocations';
+import { propertyTypes, bedroomOptions, cities, counties } from '../../data/irelandLocations';
 
 function AllPropertiesPage() {
     const globalCtx = useContext(GlobalContext)
@@ -15,11 +15,16 @@ function AllPropertiesPage() {
     const [filterMinPrice, setFilterMinPrice] = useState('');
     const [filterMaxPrice, setFilterMaxPrice] = useState('');
     const [filterBedrooms, setFilterBedrooms] = useState('');
+    const [filterCity, setFilterCity] = useState('');
+    const [filterCounty, setFilterCounty] = useState('');
 
     // Initialize filters from URL query params
     useEffect(() => {
         if (router.query.type) setFilterType(router.query.type);
+        if (router.query.subtype) setFilterSubtype(router.query.subtype);
         if (router.query.maxPrice) setFilterMaxPrice(router.query.maxPrice);
+        if (router.query.city) setFilterCity(router.query.city);
+        if (router.query.county) setFilterCounty(router.query.county);
     }, [router.query]);
 
     useEffect(() => {
@@ -31,6 +36,12 @@ function AllPropertiesPage() {
             }
             if (filterSubtype) {
                 props = props.filter(p => p.propertySubtype === filterSubtype);
+            }
+            if (filterCity) {
+                props = props.filter(p => p.city === filterCity);
+            }
+            if (filterCounty) {
+                props = props.filter(p => p.county === filterCounty);
             }
             if (filterMinPrice) {
                 props = props.filter(p => Number(p.price) >= Number(filterMinPrice));
@@ -48,7 +59,7 @@ function AllPropertiesPage() {
 
             setFilteredProperties(props);
         }
-    }, [globalCtx.theGlobalObject.dataLoaded, globalCtx.theGlobalObject.properties, filterType, filterSubtype, filterMinPrice, filterMaxPrice, filterBedrooms]);
+    }, [globalCtx.theGlobalObject.dataLoaded, globalCtx.theGlobalObject.properties, filterType, filterSubtype, filterCity, filterCounty, filterMinPrice, filterMaxPrice, filterBedrooms]);
 
     if (!globalCtx.theGlobalObject.dataLoaded) {
         return <div>Loading data from database, please wait . . . </div>
@@ -100,6 +111,20 @@ function AllPropertiesPage() {
                     style={{ padding: '0.5rem', width: '120px' }}
                 />
 
+                <select value={filterCity} onChange={(e) => setFilterCity(e.target.value)} style={{ padding: '0.5rem' }}>
+                    <option value="">All Cities</option>
+                    {cities.map(city => (
+                        <option key={city} value={city}>{city}</option>
+                    ))}
+                </select>
+
+                <select value={filterCounty} onChange={(e) => setFilterCounty(e.target.value)} style={{ padding: '0.5rem' }}>
+                    <option value="">All Counties</option>
+                    {counties.map(county => (
+                        <option key={county} value={county}>{county}</option>
+                    ))}
+                </select>
+
                 {filterType === 'Residential' && (
                     <select value={filterBedrooms} onChange={(e) => setFilterBedrooms(e.target.value)} style={{ padding: '0.5rem' }}>
                         <option value="">Any Bedrooms</option>
@@ -115,6 +140,8 @@ function AllPropertiesPage() {
                     setFilterMinPrice('');
                     setFilterMaxPrice('');
                     setFilterBedrooms('');
+                    setFilterCity('');
+                    setFilterCounty('');
                     router.push('/properties', undefined, { shallow: true });
                 }} style={{
                     padding: '0.5rem 1rem',
