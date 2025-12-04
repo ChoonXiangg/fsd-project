@@ -275,7 +275,7 @@ function ProfilePage() {
 
       {/* User's Listed Properties Section */}
       <div className={classes.propertiesSection}>
-        <h2 className={classes.propertiesTitle}>My Listed Properties</h2>
+        <h2 className={classes.propertiesTitle}>My Listed Properties ({userProperties.length})</h2>
         {userProperties.length === 0 ? (
           <p className={classes.noProperties}>You haven't listed any properties yet.</p>
         ) : (
