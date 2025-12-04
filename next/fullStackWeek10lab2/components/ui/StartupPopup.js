@@ -20,10 +20,11 @@ function StartupPopup() {
   useEffect(() => {
     const hasSeenPopup = sessionStorage.getItem('hasSeenStartupPopup');
 
-    if (!hasSeenPopup) {
+    // Show popup if user hasn't seen it AND user is not logged in
+    if (!hasSeenPopup && !globalCtx.theGlobalObject.user) {
       setIsVisible(true);
     }
-  }, []);
+  }, [globalCtx.theGlobalObject.user]); // Re-run when user state changes
 
   const closePopup = () => {
     sessionStorage.setItem('hasSeenStartupPopup', 'true');
@@ -62,7 +63,7 @@ function StartupPopup() {
       const data = await response.json();
 
       if (response.ok) {
-        globalCtx.updateGlobals({ cmd: 'setUser', newVal: data.user });
+        globalCtx.updateGlobals({ cmd: 'setUser', user: data.user, token: data.token });
         sessionStorage.setItem('hasSeenStartupPopup', 'true');
         setIsVisible(false);
       } else {
@@ -90,7 +91,7 @@ function StartupPopup() {
       const data = await response.json();
 
       if (response.ok) {
-        globalCtx.updateGlobals({ cmd: 'setUser', newVal: data.user });
+        globalCtx.updateGlobals({ cmd: 'setUser', user: data.user, token: data.token });
         sessionStorage.setItem('hasSeenStartupPopup', 'true');
         setIsVisible(false);
       } else {

@@ -15,13 +15,18 @@ function MainNavigation() {
     globalCtx.updateGlobals({ cmd: 'hideHamMenu', newVal: false })
   }
 
-
+  // Build menu contents dynamically based on user login state
   const contents = [
     { title: 'Home', webAddress: '/' },
     { title: 'All Properties', webAddress: '/properties' },
     { title: 'Add New Property', webAddress: '/new-property' },
-    { title: 'Profile', webAddress: '/profile' },
   ]
+
+  // Add Profile and Logout only if user is logged in
+  if (globalCtx.theGlobalObject.user) {
+    contents.push({ title: 'Profile', webAddress: '/profile' })
+    contents.push({ title: 'Logout', action: 'logout' })
+  }
   return (
     <header className={classes.header}>
       <HamMenuContent contents={contents} />

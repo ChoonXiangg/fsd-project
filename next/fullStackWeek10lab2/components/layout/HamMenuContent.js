@@ -17,6 +17,14 @@ export default function HamMenuContent(props) {
         router.push(webAddress)
     }
 
+    function handleLogout() {
+        globalCtx.updateGlobals({ cmd: 'hideHamMenu', newVal: true })
+        globalCtx.updateGlobals({ cmd: 'logout' })
+        // Clear session storage so the startup popup shows again
+        sessionStorage.removeItem('hasSeenStartupPopup')
+        router.push('/')
+    }
+
     function closeMe() {
         globalCtx.updateGlobals({ cmd: 'hideHamMenu', newVal: true })
         if (popupToggle == true) {
@@ -26,9 +34,22 @@ export default function HamMenuContent(props) {
         }
     }
 
-    let contentJsx = props.contents.map((item, index) => (  //  [{title: 'Meeting 1', webAddress: '/meet1'}, {title: 'Meeting 2', webAddress: '/meet2'}]
-        <div className={classes.menuItem} key={index} onClick={() => clicked(item.webAddress)} >{item.title} </div>
-    ))
+    let contentJsx = props.contents.map((item, index) => {
+        // Special handling for logout button
+        if (item.action === 'logout') {
+            return (
+                <div className={classes.logoutItem} key={index} onClick={handleLogout}>
+                    {item.title}
+                </div>
+            )
+        }
+        // Regular menu items
+        return (
+            <div className={classes.menuItem} key={index} onClick={() => clicked(item.webAddress)}>
+                {item.title}
+            </div>
+        )
+    })
 
     return (
         <div className={classes.background} onClick={() => closeMe()} >
