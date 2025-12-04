@@ -55,6 +55,16 @@
     margin-bottom: 0.5rem;
 }
 
+.usernameLink {
+    color: #77002e;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.usernameLink:hover {
+    color: #a30042;
+}
+
 .creatorInfo p {
     margin: 0.5rem 0;
     color: #4b5563;
