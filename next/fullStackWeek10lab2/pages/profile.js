@@ -2,6 +2,7 @@ import { useContext, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import GlobalContext from './store/globalContext';
 import classes from '../styles/Profile.module.css';
+import { counties, cities } from '../data/irelandLocations';
 
 function ProfilePage() {
   const globalCtx = useContext(GlobalContext);
@@ -32,6 +33,13 @@ function ProfilePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  // Property edit/delete states
+  const [editingProperty, setEditingProperty] = useState(null);
+  const [editPropertyData, setEditPropertyData] = useState({});
+  const [deleteConfirmProperty, setDeleteConfirmProperty] = useState(null);
+  const [propertyLoading, setPropertyLoading] = useState(false);
+  const [propertyError, setPropertyError] = useState('');
 
   // Redirect to home if no user is logged in
   if (!user) {
@@ -91,6 +99,104 @@ function ProfilePage() {
       setError('An error occurred. Please try again.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Property management handlers
+  const handleEditProperty = (property, e) => {
+    e.stopPropagation();
+    setEditingProperty(property._id);
+    setEditPropertyData({
+      name: property.name,
+      image: property.image,
+      address: property.address,
+      city: property.city,
+      county: property.county,
+      price: property.price,
+      propertyType: property.propertyType,
+      propertySubtype: property.propertySubtype,
+      bedrooms: property.bedrooms || '',
+      floorSize: property.floorSize
+    });
+    setPropertyError('');
+  };
+
+  const handleCancelEditProperty = () => {
+    setEditingProperty(null);
+    setEditPropertyData({});
+    setPropertyError('');
+  };
+
+  const handleSaveProperty = async () => {
+    setPropertyLoading(true);
+    setPropertyError('');
+
+    try {
+      const response = await fetch('/api/update-property', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          propertyId: editingProperty,
+          userId: user.id,
+          ...editPropertyData
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Refresh properties from database
+        await globalCtx.updateGlobals({ cmd: 'fetchPropertiesFromDB' });
+        setEditingProperty(null);
+        setEditPropertyData({});
+      } else {
+        setPropertyError(data.message || 'Failed to update property');
+      }
+    } catch (err) {
+      setPropertyError('An error occurred. Please try again.');
+    } finally {
+      setPropertyLoading(false);
+    }
+  };
+
+  const handleDeleteClick = (property, e) => {
+    e.stopPropagation();
+    setDeleteConfirmProperty(property);
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteConfirmProperty(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteConfirmProperty) return;
+
+    setPropertyLoading(true);
+    setPropertyError('');
+
+    try {
+      const response = await fetch('/api/delete-property', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          propertyId: deleteConfirmProperty._id,
+          userId: user.id
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Refresh properties from database
+        await globalCtx.updateGlobals({ cmd: 'fetchPropertiesFromDB' });
+        setDeleteConfirmProperty(null);
+      } else {
+        setPropertyError(data.message || 'Failed to delete property');
+      }
+    } catch (err) {
+      setPropertyError('An error occurred. Please try again.');
+    } finally {
+      setPropertyLoading(false);
     }
   };
 
@@ -178,15 +284,14 @@ function ProfilePage() {
               <div
                 key={property._id}
                 className={classes.propertyCard}
-                onClick={() => router.push(`/${property._id}`)}
               >
-                <div className={classes.propertyImage}>
+                <div className={classes.propertyImage} onClick={() => router.push(`/${property._id}`)}>
                   <img src={property.image} alt={property.name} />
                   {property.verifiedAgent && (
                     <span className={classes.verifiedBadge}>✓ Verified</span>
                   )}
                 </div>
-                <div className={classes.propertyInfo}>
+                <div className={classes.propertyInfo} onClick={() => router.push(`/${property._id}`)}>
                   <h3 className={classes.propertyName}>{property.name}</h3>
                   <p className={classes.propertyType}>
                     {property.propertyType} - {property.propertySubtype}
@@ -197,6 +302,20 @@ function ProfilePage() {
                   <p className={classes.propertyPrice}>
                     €{Number(property.price).toLocaleString()}
                   </p>
+                </div>
+                <div className={classes.propertyActions}>
+                  <button
+                    className={classes.editPropertyButton}
+                    onClick={(e) => handleEditProperty(property, e)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className={classes.deletePropertyButton}
+                    onClick={(e) => handleDeleteClick(property, e)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}
@@ -240,6 +359,153 @@ function ProfilePage() {
           </div>
         )}
       </div>
+
+      {/* Edit Property Modal */}
+      {editingProperty && (
+        <div className={classes.modal} onClick={handleCancelEditProperty}>
+          <div className={classes.modalContent} onClick={(e) => e.stopPropagation()}>
+            <h2>Edit Property</h2>
+            {propertyError && <div className={classes.error}>{propertyError}</div>}
+
+            <div className={classes.formGroup}>
+              <label>Property Name</label>
+              <input
+                type="text"
+                value={editPropertyData.name || ''}
+                onChange={(e) => setEditPropertyData({ ...editPropertyData, name: e.target.value })}
+              />
+            </div>
+
+            <div className={classes.formGroup}>
+              <label>Image URL</label>
+              <input
+                type="text"
+                value={editPropertyData.image || ''}
+                onChange={(e) => setEditPropertyData({ ...editPropertyData, image: e.target.value })}
+              />
+            </div>
+
+            <div className={classes.formGroup}>
+              <label>Address</label>
+              <input
+                type="text"
+                value={editPropertyData.address || ''}
+                onChange={(e) => setEditPropertyData({ ...editPropertyData, address: e.target.value })}
+              />
+            </div>
+
+            <div className={classes.formRow}>
+              <div className={classes.formGroup}>
+                <label>City</label>
+                <select
+                  value={editPropertyData.city || ''}
+                  onChange={(e) => setEditPropertyData({ ...editPropertyData, city: e.target.value })}
+                >
+                  <option value="">Select City</option>
+                  {cities.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+              </div>
+              <div className={classes.formGroup}>
+                <label>County</label>
+                <select
+                  value={editPropertyData.county || ''}
+                  onChange={(e) => setEditPropertyData({ ...editPropertyData, county: e.target.value })}
+                >
+                  <option value="">Select County</option>
+                  {counties.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className={classes.formRow}>
+              <div className={classes.formGroup}>
+                <label>Price (€)</label>
+                <input
+                  type="number"
+                  value={editPropertyData.price || ''}
+                  onChange={(e) => setEditPropertyData({ ...editPropertyData, price: Number(e.target.value) })}
+                />
+              </div>
+              <div className={classes.formGroup}>
+                <label>Floor Size (m²)</label>
+                <input
+                  type="number"
+                  value={editPropertyData.floorSize || ''}
+                  onChange={(e) => setEditPropertyData({ ...editPropertyData, floorSize: Number(e.target.value) })}
+                />
+              </div>
+            </div>
+
+            {editPropertyData.propertyType === 'Residential' && (
+              <div className={classes.formGroup}>
+                <label>Bedrooms</label>
+                <select
+                  value={editPropertyData.bedrooms || ''}
+                  onChange={(e) => setEditPropertyData({ ...editPropertyData, bedrooms: e.target.value })}
+                >
+                  <option value="">Select...</option>
+                  <option value="Studio">Studio</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5+">5+</option>
+                </select>
+              </div>
+            )}
+
+            <div className={classes.modalActions}>
+              <button
+                className={classes.cancelButton}
+                onClick={handleCancelEditProperty}
+                disabled={propertyLoading}
+              >
+                Cancel
+              </button>
+              <button
+                className={classes.saveButton}
+                onClick={handleSaveProperty}
+                disabled={propertyLoading}
+              >
+                {propertyLoading ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmProperty && (
+        <div className={classes.modal} onClick={handleCancelDelete}>
+          <div className={classes.modalContent} onClick={(e) => e.stopPropagation()}>
+            <h2>Delete Property</h2>
+            {propertyError && <div className={classes.error}>{propertyError}</div>}
+            <p>Are you sure you want to delete <strong>{deleteConfirmProperty.name}</strong>?</p>
+            <p className={classes.warning}>This action cannot be undone.</p>
+
+            <div className={classes.modalActions}>
+              <button
+                className={classes.cancelButton}
+                onClick={handleCancelDelete}
+                disabled={propertyLoading}
+              >
+                Cancel
+              </button>
+              <button
+                className={classes.deleteButton}
+                onClick={handleConfirmDelete}
+                disabled={propertyLoading}
+              >
+                {propertyLoading ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

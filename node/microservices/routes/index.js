@@ -270,4 +270,72 @@ router.post('/toggle-star', async function (req, res, next) {
   }
 });
 
+router.put('/update-property', async function (req, res, next) {
+  try {
+    const { propertyId, userId, ...updateData } = req.body;
+
+    if (!propertyId || !userId) {
+      return res.status(400).json({ message: 'Property ID and User ID are required' });
+    }
+
+    // Find the property
+    const property = await properties.findById(propertyId);
+    if (!property) {
+      return res.status(404).json({ message: 'Property not found' });
+    }
+
+    // Check if the user is the creator of the property
+    if (property.creatorId !== userId) {
+      return res.status(403).json({ message: 'You do not have permission to edit this property' });
+    }
+
+    // Update property fields
+    Object.keys(updateData).forEach(key => {
+      if (updateData[key] !== undefined) {
+        property[key] = updateData[key];
+      }
+    });
+
+    await property.save();
+
+    res.status(200).json({
+      message: 'Property updated successfully',
+      property: property
+    });
+  } catch (error) {
+    console.error('Update property error:', error);
+    res.status(500).json({ message: 'Error updating property', error: error.message });
+  }
+});
+
+router.delete('/delete-property', async function (req, res, next) {
+  try {
+    const { propertyId, userId } = req.body;
+
+    if (!propertyId || !userId) {
+      return res.status(400).json({ message: 'Property ID and User ID are required' });
+    }
+
+    // Find the property
+    const property = await properties.findById(propertyId);
+    if (!property) {
+      return res.status(404).json({ message: 'Property not found' });
+    }
+
+    // Check if the user is the creator of the property
+    if (property.creatorId !== userId) {
+      return res.status(403).json({ message: 'You do not have permission to delete this property' });
+    }
+
+    await properties.findByIdAndDelete(propertyId);
+
+    res.status(200).json({
+      message: 'Property deleted successfully'
+    });
+  } catch (error) {
+    console.error('Delete property error:', error);
+    res.status(500).json({ message: 'Error deleting property', error: error.message });
+  }
+});
+
 module.exports = router;

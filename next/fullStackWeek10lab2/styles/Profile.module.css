@@ -310,6 +310,153 @@
   color: #77002e;
 }
 
+/* Property Actions */
+.propertyActions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0 1.25rem 1.25rem 1.25rem;
+}
+
+.editPropertyButton {
+  flex: 1;
+  background-color: #1a2920;
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.editPropertyButton:hover {
+  background-color: #2d4338;
+}
+
+.deletePropertyButton {
+  flex: 1;
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.deletePropertyButton:hover {
+  background-color: #b71c1c;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modalContent {
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.modalContent h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #1a2920;
+  font-size: 1.8rem;
+}
+
+.modalActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: flex-end;
+}
+
+.deleteButton {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.deleteButton:hover:not(:disabled) {
+  background-color: #b71c1c;
+}
+
+.deleteButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Form Styles */
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: #1a2920;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.warning {
+  color: #d32f2f;
+  font-weight: 600;
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #ffebee;
+  border-radius: 6px;
+  border-left: 4px solid #d32f2f;
+}
+
 @media (max-width: 600px) {
   .container {
     margin: 1rem auto;
