@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import GlobalContext from './store/globalContext';
 import classes from '../styles/Profile.module.css';
@@ -7,6 +7,14 @@ function ProfilePage() {
   const globalCtx = useContext(GlobalContext);
   const router = useRouter();
   const user = globalCtx.theGlobalObject.user;
+
+  // Filter properties created by this user
+  const userProperties = useMemo(() => {
+    if (!user || !globalCtx.theGlobalObject.properties) return [];
+    return globalCtx.theGlobalObject.properties.filter(
+      property => property.creatorId === user.id
+    );
+  }, [user, globalCtx.theGlobalObject.properties]);
 
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({
@@ -149,6 +157,43 @@ function ProfilePage() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* User's Listed Properties Section */}
+      <div className={classes.propertiesSection}>
+        <h2 className={classes.propertiesTitle}>My Listed Properties</h2>
+        {userProperties.length === 0 ? (
+          <p className={classes.noProperties}>You haven't listed any properties yet.</p>
+        ) : (
+          <div className={classes.propertiesGrid}>
+            {userProperties.map((property) => (
+              <div
+                key={property._id}
+                className={classes.propertyCard}
+                onClick={() => router.push(`/${property._id}`)}
+              >
+                <div className={classes.propertyImage}>
+                  <img src={property.image} alt={property.name} />
+                  {property.verifiedAgent && (
+                    <span className={classes.verifiedBadge}>✓ Verified</span>
+                  )}
+                </div>
+                <div className={classes.propertyInfo}>
+                  <h3 className={classes.propertyName}>{property.name}</h3>
+                  <p className={classes.propertyType}>
+                    {property.propertyType} - {property.propertySubtype}
+                  </p>
+                  <p className={classes.propertyLocation}>
+                    {property.city}, {property.county}
+                  </p>
+                  <p className={classes.propertyPrice}>
+                    €{Number(property.price).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
