@@ -1,5 +1,6 @@
 .item {
   margin: 1rem 0;
+  height: 100%;
 }
 
 .image {
@@ -32,6 +33,7 @@
 .content {
   text-align: center;
   padding: 1rem;
+  flex: 1;
 }
 
 .content h3 {

@@ -66,7 +66,7 @@ function AllPropertiesPage() {
     }
 
     return (
-        <div>
+        <div style={{ width: '100%', maxWidth: '100%' }}>
             <div style={{
                 backgroundColor: '#f4f4f4',
                 padding: '1rem',
