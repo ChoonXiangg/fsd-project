@@ -9,7 +9,7 @@ import { createContext, useState, useEffect } from 'react'
 const GlobalContext = createContext()
 
 export function GlobalContextProvider(props) {
-    const [globals, setGlobals] = useState({ aString: 'init val', count: 0, hideHamMenu: true, properties: [], dataLoaded: false, user: null })
+    const [globals, setGlobals] = useState({ aString: 'init val', count: 0, hideHamMenu: true, properties: [], buys: [], rents: [], dataLoaded: false, user: null })
 
     useEffect(() => {
         getAllProperties()
@@ -17,15 +17,27 @@ export function GlobalContextProvider(props) {
     }, []);
 
     async function getAllProperties() {
-        const response = await fetch('/api/get-properties', {
+        const responseBuys = await fetch('/api/get-properties', { // Using existing proxy for buys for now, need valid endpoints
             method: 'POST',
-            body: JSON.stringify({ properties: 'all' }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            body: JSON.stringify({ type: 'buys' }),
+            headers: { 'Content-Type': 'application/json' }
         });
-        let data = await response.json();
-        setGlobals((previousGlobals) => { const newGlobals = JSON.parse(JSON.stringify(previousGlobals)); newGlobals.properties = data.properties; newGlobals.dataLoaded = true; return newGlobals })
+        const responseRents = await fetch('/api/get-rents', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        let dataBuys = await responseBuys.json();
+        let dataRents = await responseRents.json();
+
+        setGlobals((previousGlobals) => {
+            const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
+            newGlobals.buys = dataBuys.buys || [];
+            newGlobals.rents = dataRents.rents || [];
+            newGlobals.properties = [...(dataBuys.buys || []), ...(dataRents.rents || [])]; // Keep properties for backward compatibility
+            newGlobals.dataLoaded = true;
+            return newGlobals
+        })
     }
 
     async function checkAuthToken() {
@@ -90,10 +102,9 @@ export function GlobalContextProvider(props) {
                 }
             });
             const data = await response.json(); // Should check here that it worked OK
-            setGlobals((previousGlobals) => {
-                const newGlobals = JSON.parse(JSON.stringify(previousGlobals))
-                newGlobals.properties.push(data); return newGlobals
-            })
+
+            // Re-fetch everything to keep it simple and consistent with backend splitting
+            await getAllProperties();
         }
         if (command.cmd == 'setUser') { // {cmd: 'setUser', user: {username, email, etc}, token: 'jwt-token'}
             // Store JWT token in localStorage if provided
