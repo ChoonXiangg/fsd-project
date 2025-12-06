@@ -29,7 +29,7 @@ let propertySchema = new Schema({
 }, { collection: 'properties' });
 
 let userSchema = new Schema({
-  username: String,
+  username: { type: String, unique: true },
   email: { type: String, unique: true, required: true },
   password: String,
   phoneNumber: String,
@@ -74,6 +74,20 @@ router.post('/signup', async function (req, res, next) {
       return res.status(400).json({ message: 'Email already exists' });
     }
 
+    // Check if username already exists
+    const existingUsername = await users.findOne({ username });
+    if (existingUsername) {
+      return res.status(400).json({ message: 'Username already exists' });
+    }
+
+    // Check if phone number already exists (if provided)
+    if (phoneNumber) {
+      const existingPhone = await users.findOne({ phoneNumber });
+      if (existingPhone) {
+        return res.status(400).json({ message: 'Phone number already in use' });
+      }
+    }
+
     // Create new user
     const newUser = await users.create({
       username,
@@ -106,6 +120,18 @@ router.post('/signup', async function (req, res, next) {
     });
   } catch (error) {
     console.error('Signup error:', error);
+    if (error.code === 11000) {
+      if (error.keyPattern && error.keyPattern.phoneNumber) {
+        return res.status(400).json({ message: 'Phone number already in use' });
+      }
+      if (error.keyPattern && error.keyPattern.email) {
+        return res.status(400).json({ message: 'Email already exists' });
+      }
+      if (error.keyPattern && error.keyPattern.username) {
+        return res.status(400).json({ message: 'Username already exists' });
+      }
+      return res.status(400).json({ message: 'Duplicate key error' });
+    }
     res.status(500).json({ message: 'Error creating user' });
   }
 });
@@ -193,9 +219,9 @@ router.post('/verify-token', async function (req, res, next) {
 
 router.put('/update-profile', async function (req, res, next) {
   try {
-    const { userId, username, phoneNumber } = req.body;
+    const { userId, username, phoneNumber, email } = req.body;
 
-    console.log('Update profile request:', { userId, username, phoneNumber });
+    console.log('Update profile request:', { userId, username, phoneNumber, email });
 
     // Find user first
     const user = await users.findById(userId);
@@ -203,9 +229,33 @@ router.put('/update-profile', async function (req, res, next) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Update user fields
-    user.username = username;
-    user.phoneNumber = phoneNumber;
+    // Link checks are done. Now update user fields
+    if (email && email !== user.email) {
+      // Check for duplicate email
+      const existingEmail = await users.findOne({ email });
+      if (existingEmail && existingEmail._id.toString() !== userId) {
+        return res.status(400).json({ message: 'Email already exists' });
+      }
+      user.email = email;
+    }
+
+    if (username && username !== user.username) {
+      // Check for duplicate username
+      const existingUsername = await users.findOne({ username });
+      if (existingUsername && existingUsername._id.toString() !== userId) {
+        return res.status(400).json({ message: 'Username already exists' });
+      }
+      user.username = username;
+    }
+
+    if (phoneNumber && phoneNumber !== user.phoneNumber) {
+      // Check for duplicate phoneNumber
+      const existingPhoneNumber = await users.findOne({ phoneNumber });
+      if (existingPhoneNumber && existingPhoneNumber._id.toString() !== userId) {
+        return res.status(400).json({ message: 'Phone number already in use' });
+      }
+      user.phoneNumber = phoneNumber;
+    }
 
     // Save the updated user
     const updatedUser = await user.save();
@@ -223,6 +273,18 @@ router.put('/update-profile', async function (req, res, next) {
   } catch (error) {
     console.error('Update profile error:', error);
     console.error('Error details:', error.message);
+    if (error.code === 11000) {
+      if (error.keyPattern && error.keyPattern.username) {
+        return res.status(400).json({ message: 'Username already exists' });
+      }
+      if (error.keyPattern && error.keyPattern.email) {
+        return res.status(400).json({ message: 'Email already exists' });
+      }
+      if (error.keyPattern && error.keyPattern.phoneNumber) {
+        return res.status(400).json({ message: 'Phone number already in use' });
+      }
+      return res.status(400).json({ message: 'Email, username or phone number already in use' });
+    }
     res.status(500).json({ message: 'Error updating profile', error: error.message });
   }
 });

@@ -27,38 +27,36 @@ export const counties = [
     'Wicklow'
 ];
 
-export const cities = [
-    'Dublin',
-    'Cork',
-    'Limerick',
-    'Galway',
-    'Waterford',
-    'Drogheda',
-    'Dundalk',
-    'Swords',
-    'Bray',
-    'Navan',
-    'Ennis',
-    'Kilkenny',
-    'Carlow',
-    'Tralee',
-    'Newbridge',
-    'Naas',
-    'Athlone',
-    'Mullingar',
-    'Wexford',
-    'Letterkenny',
-    'Sligo',
-    'Clonmel',
-    'Greystones',
-    'Malahide',
-    'Portlaoise',
-    'Balbriggan',
-    'Ashbourne',
-    'Celbridge',
-    'Tullamore',
-    'Leixlip'
-];
+export const citiesByCounty = {
+    Dublin: ['Dublin', 'Swords', 'Malahide', 'Balbriggan', 'Skerries'],
+    Cork: ['Cork', 'Ballincollig', 'Carrigaline', 'Cobh', 'Midleton'],
+    Limerick: ['Limerick', 'Newcastle West', 'Annacotty', 'Castleconnell'],
+    Galway: ['Galway', 'Tuam', 'Ballinasloe', 'Loughrea', 'Oranmore'],
+    Waterford: ['Waterford', 'Tramore', 'Dungarvan', 'Dunmore East'],
+    Louth: ['Drogheda', 'Dundalk', 'Ardee'],
+    Wicklow: ['Bray', 'Greystones', 'Arklow', 'Wicklow Town', 'Blessington'],
+    Meath: ['Navan', 'Ashbourne', 'Ratoath', 'Dunboyne', 'Trim'],
+    Clare: ['Ennis', 'Shannon', 'Kilrush'],
+    Kilkenny: ['Kilkenny', 'Callan', 'Thomastown'],
+    Carlow: ['Carlow', 'Tullow', 'Muine Bheag'],
+    Kerry: ['Tralee', 'Killarney', 'Listowel', 'Castleisland'],
+    Kildare: ['Naas', 'Newbridge', 'Celbridge', 'Leixlip', 'Maynooth'],
+    Westmeath: ['Athlone', 'Mullingar', 'Moate'],
+    Wexford: ['Wexford', 'Enniscorthy', 'Gorey', 'New Ross'],
+    Donegal: ['Letterkenny', 'Buncrana', 'Ballybofey', 'Donegal Town'],
+    Sligo: ['Sligo', 'Tubbercurry', 'Ballymote'],
+    Tipperary: ['Clonmel', 'Nenagh', 'Thurles', 'Cashel', 'Tipperary Town'],
+    Laois: ['Portlaoise', 'Portarlington', 'Mountmellick'],
+    Offaly: ['Tullamore', 'Edenderry', 'Birr'],
+    Cavan: ['Cavan', 'Virginia', 'Kingscourt'],
+    Monaghan: ['Monaghan', 'Carrickmacross', 'Castleblayney'],
+    Roscommon: ['Roscommon', 'Boyle', 'Castlerea'],
+    Leitrim: ['Carrick-on-Shannon', 'Manorhamilton', 'Ballinamore'],
+    Longford: ['Longford', 'Ballymahon', 'Granard'],
+    Mayo: ['Castlebar', 'Ballina', 'Westport', 'Claremorris']
+};
+
+export const cities = Object.values(citiesByCounty).flat().sort();
 
 export const propertyTypes = {
     Residential: [

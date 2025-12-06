@@ -3,7 +3,7 @@ import GlobalContext from '../../pages/store/globalContext';
 
 import Card from '../ui/Card';
 import classes from './NewPropertyForm.module.css';
-import { counties, cities, propertyTypes, bedroomOptions } from '../../data/irelandLocations';
+import { counties, cities, propertyTypes, bedroomOptions, citiesByCounty } from '../../data/irelandLocations';
 
 function NewPropertyForm(props) {
   const globalCtx = useContext(GlobalContext);
@@ -155,20 +155,23 @@ function NewPropertyForm(props) {
         </div>
 
         <div className={classes.control}>
-          <label htmlFor='city'>City</label>
-          <select id='city' required value={city} onChange={(e) => setCity(e.target.value)}>
-            <option value="">Select City</option>
-            {cities.map((c) => (
+          <label htmlFor='county'>County</label>
+          <select id='county' required value={county} onChange={(e) => {
+            setCounty(e.target.value);
+            setCity('');
+          }}>
+            <option value="">Select County</option>
+            {counties.map((c) => (
               <option key={c} value={c}>{c}</option>
             ))}
           </select>
         </div>
 
         <div className={classes.control}>
-          <label htmlFor='county'>County</label>
-          <select id='county' required value={county} onChange={(e) => setCounty(e.target.value)}>
-            <option value="">Select County</option>
-            {counties.map((c) => (
+          <label htmlFor='city'>City</label>
+          <select id='city' required value={city} onChange={(e) => setCity(e.target.value)}>
+            <option value="">Select City</option>
+            {(county ? (citiesByCounty[county] || []) : cities).map((c) => (
               <option key={c} value={c}>{c}</option>
             ))}
           </select>
