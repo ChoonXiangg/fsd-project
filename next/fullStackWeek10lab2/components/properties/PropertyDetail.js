@@ -79,6 +79,7 @@ function PropertyDetail(props) {
             <p className={classes.price}>€{Number(props.price).toLocaleString()}</p>
             {props.bedrooms && <p>Bedrooms: {props.bedrooms}</p>}
             <p>Floor Size: {props.floorSize} m²</p>
+            {props.dateAdded && <p style={{ fontSize: '0.9rem', color: '#666', marginTop: '0.5rem' }}>Listed on: {new Date(props.dateAdded).toLocaleDateString()}</p>}
 
             <div className={classes.creatorInfo}>
                 <h3>Contact Information</h3>
