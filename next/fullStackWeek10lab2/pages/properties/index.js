@@ -2,7 +2,7 @@ import PropertyList from '../../components/properties/PropertyList'
 import { useContext, useEffect, useState } from "react";
 import GlobalContext from "../store/globalContext"
 import { useRouter } from 'next/router';
-import { propertyTypes, bedroomOptions, cities, counties } from '../../data/irelandLocations';
+import { propertyTypes, bedroomOptions, cities, counties, citiesByCounty } from '../../data/irelandLocations';
 
 function AllPropertiesPage() {
     const globalCtx = useContext(GlobalContext)
@@ -111,17 +111,20 @@ function AllPropertiesPage() {
                     style={{ padding: '0.5rem', width: '120px' }}
                 />
 
-                <select value={filterCity} onChange={(e) => setFilterCity(e.target.value)} style={{ padding: '0.5rem' }}>
-                    <option value="">All Cities</option>
-                    {cities.map(city => (
-                        <option key={city} value={city}>{city}</option>
-                    ))}
-                </select>
-
-                <select value={filterCounty} onChange={(e) => setFilterCounty(e.target.value)} style={{ padding: '0.5rem' }}>
+                <select value={filterCounty} onChange={(e) => {
+                    setFilterCounty(e.target.value);
+                    setFilterCity('');
+                }} style={{ padding: '0.5rem' }}>
                     <option value="">All Counties</option>
                     {counties.map(county => (
                         <option key={county} value={county}>{county}</option>
+                    ))}
+                </select>
+
+                <select value={filterCity} onChange={(e) => setFilterCity(e.target.value)} style={{ padding: '0.5rem' }}>
+                    <option value="">All Cities</option>
+                    {(filterCounty ? (citiesByCounty[filterCounty] || []) : cities).map(city => (
+                        <option key={city} value={city}>{city}</option>
                     ))}
                 </select>
 

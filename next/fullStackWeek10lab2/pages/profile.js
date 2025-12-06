@@ -28,6 +28,7 @@ function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({
     username: user?.username || '',
+    email: user?.email || '',
     phoneNumber: user?.phoneNumber || ''
   });
   const [loading, setLoading] = useState(false);
@@ -53,6 +54,7 @@ function ProfilePage() {
     setIsEditing(true);
     setEditData({
       username: user.username,
+      email: user.email,
       phoneNumber: user.phoneNumber || ''
     });
     setError('');
@@ -63,6 +65,7 @@ function ProfilePage() {
     setIsEditing(false);
     setEditData({
       username: user.username,
+      email: user.email,
       phoneNumber: user.phoneNumber || ''
     });
     setError('');
@@ -81,6 +84,7 @@ function ProfilePage() {
         body: JSON.stringify({
           userId: user.id,
           username: editData.username,
+          email: editData.email,
           phoneNumber: editData.phoneNumber
         })
       });
@@ -224,7 +228,14 @@ function ProfilePage() {
                 onChange={(e) => setEditData({ ...editData, username: e.target.value })}
                 placeholder="Username"
               />
-              <p className={classes.email}>{user.email}</p>
+              <input
+                type="email"
+                className={classes.editInput}
+                value={editData.email}
+                onChange={(e) => setEditData({ ...editData, email: e.target.value })}
+                placeholder="Email"
+                style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}
+              />
             </>
           )}
         </div>
