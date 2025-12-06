@@ -29,6 +29,7 @@ export default function () {
                 creatorEmail={temp.creatorEmail}
                 creatorPhoneNumber={temp.creatorPhoneNumber}
                 starredBy={temp.starredBy || []}
+                dateAdded={temp.dateAdded}
             />
         }
     }

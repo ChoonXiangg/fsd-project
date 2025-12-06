@@ -16,9 +16,24 @@ function HomePage() {
                         color: 'white',
                         textDecoration: 'none',
                         borderRadius: '4px',
-                        fontWeight: 'bold'
+                        fontWeight: 'bold',
+                        marginRight: '1rem'
                     }}>
                         Find affordable homes under €500k
+                    </a>
+                </Link>
+
+                <Link href="/properties?timeAdded=lastMonth">
+                    <a style={{
+                        display: 'inline-block',
+                        padding: '1rem 2rem',
+                        backgroundColor: '#77002e',
+                        color: 'white',
+                        textDecoration: 'none',
+                        borderRadius: '4px',
+                        fontWeight: 'bold'
+                    }}>
+                        Explore new launches
                     </a>
                 </Link>
             </div>

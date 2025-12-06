@@ -25,7 +25,8 @@ let propertySchema = new Schema({
   creatorUsername: String,
   creatorEmail: String,
   creatorPhoneNumber: String,
-  starredBy: [String] // Array of user IDs who have starred this property
+  starredBy: [String], // Array of user IDs who have starred this property
+  dateAdded: { type: Date, default: Date.now }
 }, { collection: 'properties' });
 
 let userSchema = new Schema({

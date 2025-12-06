@@ -17,6 +17,7 @@ function AllPropertiesPage() {
     const [filterBedrooms, setFilterBedrooms] = useState('');
     const [filterCity, setFilterCity] = useState('');
     const [filterCounty, setFilterCounty] = useState('');
+    const [filterTimeAdded, setFilterTimeAdded] = useState('');
 
     // Initialize filters from URL query params
     useEffect(() => {
@@ -25,6 +26,15 @@ function AllPropertiesPage() {
         if (router.query.maxPrice) setFilterMaxPrice(router.query.maxPrice);
         if (router.query.city) setFilterCity(router.query.city);
         if (router.query.county) setFilterCounty(router.query.county);
+        if (router.query.timeAdded) {
+            if (router.query.timeAdded === 'lastMonth') {
+                const d = new Date();
+                d.setMonth(d.getMonth() - 1);
+                setFilterTimeAdded(d.toISOString().split('T')[0]);
+            } else {
+                setFilterTimeAdded(router.query.timeAdded);
+            }
+        }
     }, [router.query]);
 
     useEffect(() => {
@@ -56,10 +66,14 @@ function AllPropertiesPage() {
                     props = props.filter(p => p.bedrooms === filterBedrooms);
                 }
             }
+            if (filterTimeAdded) {
+                const selectedDate = new Date(filterTimeAdded);
+                props = props.filter(p => new Date(p.dateAdded) >= selectedDate);
+            }
 
             setFilteredProperties(props);
         }
-    }, [globalCtx.theGlobalObject.dataLoaded, globalCtx.theGlobalObject.properties, filterType, filterSubtype, filterCity, filterCounty, filterMinPrice, filterMaxPrice, filterBedrooms]);
+    }, [globalCtx.theGlobalObject.dataLoaded, globalCtx.theGlobalObject.properties, filterType, filterSubtype, filterCity, filterCounty, filterMinPrice, filterMaxPrice, filterBedrooms, filterTimeAdded]);
 
     if (!globalCtx.theGlobalObject.dataLoaded) {
         return <div>Loading data from database, please wait . . . </div>
@@ -137,6 +151,16 @@ function AllPropertiesPage() {
                     </select>
                 )}
 
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <label style={{ fontSize: '0.9rem', color: '#666' }}>Added after:</label>
+                    <input
+                        type="date"
+                        value={filterTimeAdded}
+                        onChange={(e) => setFilterTimeAdded(e.target.value)}
+                        style={{ padding: '0.5rem' }}
+                    />
+                </div>
+
                 <button onClick={() => {
                     setFilterType('');
                     setFilterSubtype('');
@@ -145,6 +169,7 @@ function AllPropertiesPage() {
                     setFilterBedrooms('');
                     setFilterCity('');
                     setFilterCounty('');
+                    setFilterTimeAdded('');
                     router.push('/properties', undefined, { shallow: true });
                 }} style={{
                     padding: '0.5rem 1rem',
