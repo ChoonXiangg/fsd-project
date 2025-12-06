@@ -13,6 +13,7 @@ function NewPropertyForm(props) {
   const floorSizeInputRef = useRef();
 
   // State for form fields
+  const [listingType, setListingType] = useState('Buy');
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [dragActive, setDragActive] = useState(false);
@@ -23,6 +24,7 @@ function NewPropertyForm(props) {
   const [county, setCounty] = useState('');
   const [bedrooms, setBedrooms] = useState('');
 
+  // ... existing handlers ...
   function handleDrag(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -86,6 +88,7 @@ function NewPropertyForm(props) {
     const user = globalCtx.theGlobalObject.user;
 
     const propertyData = {
+      listingType: listingType, // Add listingType to data
       name: enteredName,
       image: finalImage,
       address: enteredAddress,
@@ -109,6 +112,14 @@ function NewPropertyForm(props) {
   return (
     <Card>
       <form className={classes.form} onSubmit={submitHandler}>
+        <div className={classes.control}>
+          <label htmlFor='listingType'>Listing Type</label>
+          <select id='listingType' value={listingType} onChange={(e) => setListingType(e.target.value)}>
+            <option value="Buy">For Sale</option>
+            <option value="Rent">For Rent</option>
+          </select>
+        </div>
+
         <div className={classes.control}>
           <label htmlFor='name'>Property Name</label>
           <input type='text' required id='name' ref={nameInputRef} />

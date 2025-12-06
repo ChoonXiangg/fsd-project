@@ -18,9 +18,17 @@ function AllPropertiesPage() {
     const [filterCity, setFilterCity] = useState('');
     const [filterCounty, setFilterCounty] = useState('');
     const [filterTimeAdded, setFilterTimeAdded] = useState('');
+    const [filterListingType, setFilterListingType] = useState('Buy');
 
     // Initialize filters from URL query params
     useEffect(() => {
+        if (router.query.listingType) {
+            setFilterListingType(router.query.listingType);
+        } else if (router.pathname === '/rent') {
+            // Keep this check just in case, though we deleted rent.js
+            setFilterListingType('Rent');
+        }
+
         if (router.query.type) setFilterType(router.query.type);
         if (router.query.subtype) setFilterSubtype(router.query.subtype);
         if (router.query.maxPrice) setFilterMaxPrice(router.query.maxPrice);
@@ -39,7 +47,15 @@ function AllPropertiesPage() {
 
     useEffect(() => {
         if (globalCtx.theGlobalObject.dataLoaded) {
-            let props = globalCtx.theGlobalObject.properties;
+            let props = [];
+            if (filterListingType === 'Buy') {
+                props = globalCtx.theGlobalObject.buys;
+            } else if (filterListingType === 'Rent') {
+                props = globalCtx.theGlobalObject.rents;
+            } else {
+                // Fallback or 'All' if we wanted that
+                props = [...globalCtx.theGlobalObject.buys, ...globalCtx.theGlobalObject.rents];
+            }
 
             if (filterType) {
                 props = props.filter(p => p.propertyType === filterType);
@@ -73,7 +89,7 @@ function AllPropertiesPage() {
 
             setFilteredProperties(props);
         }
-    }, [globalCtx.theGlobalObject.dataLoaded, globalCtx.theGlobalObject.properties, filterType, filterSubtype, filterCity, filterCounty, filterMinPrice, filterMaxPrice, filterBedrooms, filterTimeAdded]);
+    }, [globalCtx.theGlobalObject.dataLoaded, globalCtx.theGlobalObject.buys, globalCtx.theGlobalObject.rents, filterType, filterSubtype, filterCity, filterCounty, filterMinPrice, filterMaxPrice, filterBedrooms, filterTimeAdded, filterListingType]);
 
     if (!globalCtx.theGlobalObject.dataLoaded) {
         return <div>Loading data from database, please wait . . . </div>
@@ -91,6 +107,11 @@ function AllPropertiesPage() {
                 gap: '1rem',
                 alignItems: 'center'
             }}>
+                <select value={filterListingType} onChange={(e) => setFilterListingType(e.target.value)} style={{ padding: '0.5rem', fontWeight: 'bold' }}>
+                    <option value="Buy">For Sale</option>
+                    <option value="Rent">For Rent</option>
+                </select>
+
                 <select value={filterType} onChange={(e) => {
                     setFilterType(e.target.value);
                     setFilterSubtype(''); // Reset subtype when type changes

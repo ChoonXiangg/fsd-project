@@ -37,33 +37,35 @@ let userSchema = new Schema({
   verifiedAgent: Boolean
 }, { collection: 'users' });
 
-let properties = oldMong.model('properties', propertySchema);
+let buys = oldMong.model('buys', propertySchema);
+let rents = oldMong.model('rents', propertySchema);
 let users = oldMong.model('users', userSchema);
 
 router.get('/', async function (req, res, next) {
   res.render('index');
 });
 
-router.post('/getProperties', async function (req, res, next) {
-  const allProperties = await getProperties();
-  res.json(allProperties);
+router.post('/getBuys', async function (req, res, next) {
+  const allBuys = await buys.find().lean();
+  res.json({ buys: allBuys });
 });
 
-async function getProperties() {
-  data = await properties.find().lean();
-  return { properties: data };
-}
-
-router.post('/saveProperty', async function (req, res, next) {
-  const result = await saveProperty(req.body);
-  res.json(result);
+router.post('/getRents', async function (req, res, next) {
+  const allRents = await rents.find().lean();
+  res.json({ rents: allRents });
 });
 
-async function saveProperty(theProperty) {
-  console.log('theProperty: ', theProperty);
-  const savedProperty = await properties.create(theProperty);
-  return savedProperty;
-}
+router.post('/saveBuy', async function (req, res, next) {
+  console.log('saving buy:', req.body);
+  const savedBuy = await buys.create(req.body);
+  res.json(savedBuy);
+});
+
+router.post('/saveRent', async function (req, res, next) {
+  console.log('saving rent:', req.body);
+  const savedRent = await rents.create(req.body);
+  res.json(savedRent);
+});
 
 router.post('/signup', async function (req, res, next) {
   try {

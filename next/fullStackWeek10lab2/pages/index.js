@@ -38,9 +38,34 @@ function HomePage() {
                 </Link>
             </div>
 
-            <div style={{ marginTop: '1rem' }}>
+            <div style={{ marginTop: '2rem' }}>
                 <Link href="/properties">
-                    <a style={{ color: '#1a2920' }}>View All Properties</a>
+                    <a style={{
+                        display: 'inline-block',
+                        padding: '1rem 2rem',
+                        backgroundColor: '#1a2920',
+                        color: 'white',
+                        textDecoration: 'none',
+                        borderRadius: '4px',
+                        fontWeight: 'bold',
+                        marginRight: '1rem'
+                    }}>
+                        Buy Properties
+                    </a>
+                </Link>
+
+                <Link href="/properties?listingType=Rent">
+                    <a style={{
+                        display: 'inline-block',
+                        padding: '1rem 2rem',
+                        backgroundColor: '#1a2920',
+                        color: 'white',
+                        textDecoration: 'none',
+                        borderRadius: '4px',
+                        fontWeight: 'bold'
+                    }}>
+                        Rent Properties
+                    </a>
                 </Link>
             </div>
         </div>
