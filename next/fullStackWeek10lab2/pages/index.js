@@ -1,23 +1,27 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { counties, citiesByCounty } from '../data/irelandLocations';
+import { propertyTypes, bedroomOptions } from '../data/irelandLocations';
 import classes from '../styles/Home.module.css';
 
 function HomePage() {
     const router = useRouter();
-    const [searchType, setSearchType] = useState('Buy');
+    const [searchType, setSearchType] = useState('Buy'); // Listing type: Buy/Rent
     const [searchText, setSearchText] = useState('');
-    const [searchCounty, setSearchCounty] = useState('');
-    const [searchCity, setSearchCity] = useState('');
+    const [searchPropertyType, setSearchPropertyType] = useState('');
+    const [searchMinPrice, setSearchMinPrice] = useState('');
+    const [searchMaxPrice, setSearchMaxPrice] = useState('');
+    const [searchBedrooms, setSearchBedrooms] = useState('');
 
     const handleSearch = () => {
         const query = {
             listingType: searchType,
         };
         if (searchText) query.searchTerm = searchText;
-        if (searchCounty) query.county = searchCounty;
-        if (searchCity) query.city = searchCity;
+        if (searchPropertyType) query.type = searchPropertyType;
+        if (searchMinPrice) query.minPrice = searchMinPrice;
+        if (searchMaxPrice) query.maxPrice = searchMaxPrice;
+        if (searchBedrooms) query.bedrooms = searchBedrooms;
 
         router.push({
             pathname: '/properties',
@@ -35,7 +39,7 @@ function HomePage() {
                 padding: '1.5rem',
                 backgroundColor: 'white',
                 borderRadius: '8px',
-                maxWidth: '800px',
+                maxWidth: '900px',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                 display: 'flex',
                 gap: '1rem',
@@ -58,30 +62,43 @@ function HomePage() {
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                    style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc', minWidth: '200px' }}
+                    style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc', minWidth: '200px', flex: 1 }}
                 />
 
                 <select
-                    value={searchCounty}
-                    onChange={(e) => {
-                        setSearchCounty(e.target.value);
-                        setSearchCity('');
-                    }}
-                    style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc', minWidth: '150px' }}
+                    value={searchPropertyType}
+                    onChange={(e) => setSearchPropertyType(e.target.value)}
+                    style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc' }}
                 >
-                    <option value="">Select County</option>
-                    {counties.map(c => <option key={c} value={c}>{c}</option>)}
+                    <option value="">All Types</option>
+                    <option value="Residential">Residential</option>
+                    <option value="Commercial">Commercial</option>
                 </select>
 
+                <input
+                    type="number"
+                    placeholder="Min Price"
+                    value={searchMinPrice}
+                    onChange={(e) => setSearchMinPrice(e.target.value)}
+                    style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc', width: '120px' }}
+                />
+
+                <input
+                    type="number"
+                    placeholder="Max Price"
+                    value={searchMaxPrice}
+                    onChange={(e) => setSearchMaxPrice(e.target.value)}
+                    style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc', width: '120px' }}
+                />
+
                 <select
-                    value={searchCity}
-                    onChange={(e) => setSearchCity(e.target.value)}
-                    style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc', minWidth: '150px' }}
-                    disabled={!searchCounty}
+                    value={searchBedrooms}
+                    onChange={(e) => setSearchBedrooms(e.target.value)}
+                    style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc' }}
                 >
-                    <option value="">Select City</option>
-                    {searchCounty && (citiesByCounty[searchCounty] || []).map(c => (
-                        <option key={c} value={c}>{c}</option>
+                    <option value="">Bedrooms</option>
+                    {bedroomOptions.map(opt => (
+                        <option key={opt} value={opt}>{opt}</option>
                     ))}
                 </select>
 
