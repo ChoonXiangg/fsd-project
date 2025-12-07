@@ -29,6 +29,8 @@ let propertySchema = new Schema({
   dateAdded: { type: Date, default: Date.now }
 }, { collection: 'properties' });
 
+// ... (existing code: imports and connections)
+
 let userSchema = new Schema({
   username: { type: String, unique: true },
   email: { type: String, unique: true, required: true },
@@ -37,9 +39,21 @@ let userSchema = new Schema({
   verifiedAgent: Boolean
 }, { collection: 'users' });
 
+let guideSchema = new Schema({
+  title: String,
+  category: String,
+  content: String,
+  excerpt: String,
+  image: String,
+  dateAdded: { type: Date, default: Date.now },
+  views: { type: Number, default: 0 },
+  readTime: String,
+}, { collection: 'guides' });
+
 let buys = oldMong.model('buys', propertySchema);
 let rents = oldMong.model('rents', propertySchema);
 let users = oldMong.model('users', userSchema);
+let guides = oldMong.model('guides', guideSchema);
 
 router.get('/', async function (req, res, next) {
   res.render('index');
@@ -65,6 +79,114 @@ router.post('/saveRent', async function (req, res, next) {
   console.log('saving rent:', req.body);
   const savedRent = await rents.create(req.body);
   res.json(savedRent);
+});
+
+router.get('/getGuides', async function (req, res, next) {
+  const allGuides = await guides.find().lean();
+  res.json(allGuides);
+});
+
+// Seed endpoint to populate guides if empty
+router.post('/seedGuides', async function (req, res, next) {
+  const count = await guides.countDocuments();
+  if (count === 0) {
+    // Sample data from the frontend mock
+    const initialGuides = [
+      {
+        title: "First-Time Buyer's Checklist 2024",
+        category: "Buying",
+        dateAdded: new Date("2024-02-15"),
+        excerpt: "Everything you need to know before buying your first home in Ireland.",
+        image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+        views: 120,
+        readTime: "5 min read"
+      },
+      {
+        title: "Top 5 Renovation Tips for Spring",
+        category: "Home Improvement",
+        dateAdded: new Date("2024-02-10"),
+        excerpt: "Spruce up your home with these cost-effective improvement ideas.",
+        image: "https://images.unsplash.com/photo-1484154218962-a1c002085d2f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+        views: 85,
+        readTime: "4 min read"
+      },
+      {
+        title: "Understanding Property Tax in 2024",
+        category: "Legal & Tax",
+        dateAdded: new Date("2024-02-05"),
+        excerpt: "A comprehensive guide to property taxes for homeowners and landlords.",
+        image: "https://images.unsplash.com/photo-1554224155-9840635290aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+        views: 200,
+        readTime: "6 min read"
+      },
+      {
+        title: "How to Stage Your Home for Sale",
+        category: "Selling",
+        dateAdded: new Date("2024-01-20"),
+        excerpt: "Maximize your sale price with these staging secrets.",
+        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+        views: 5000,
+        readTime: "7 min read"
+      },
+      {
+        title: "Mortgage Application Mistakes to Avoid",
+        category: "Home Financing",
+        dateAdded: new Date("2024-01-15"),
+        excerpt: "Don't let these common errors derail your mortgage approval.",
+        image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+        views: 4200,
+        readTime: "8 min read"
+      },
+      {
+        title: "Renting vs Buying: A Financial Analysis",
+        category: "Property Insights",
+        dateAdded: new Date("2024-01-10"),
+        excerpt: "Breaking down the long-term costs of renting versus buying.",
+        image: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+        views: 3800,
+        readTime: "10 min read"
+      },
+      {
+        title: "Tenant Rights in Ireland",
+        category: "Renting",
+        dateAdded: new Date("2024-01-05"),
+        excerpt: "Know your rights as a tenant in the current market.",
+        image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+        views: 3500,
+        readTime: "6 min read"
+      },
+      {
+        title: "Eco-Friendly Home Improvements",
+        category: "Home Improvement",
+        dateAdded: new Date("2023-12-28"),
+        excerpt: "Sustainable upgrades that save money and the planet.",
+        image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+        views: 3100,
+        readTime: "5 min read"
+      }
+    ];
+    await guides.insertMany(initialGuides);
+    res.json({ message: "Seeded guides successfully", guides: initialGuides });
+  } else {
+    res.json({ message: "Guides already exist", count });
+  }
+});
+
+router.post('/incrementGuideView', async function (req, res, next) {
+  const { guideId } = req.body;
+  await guides.findByIdAndUpdate(guideId, { $inc: { views: 1 } });
+  res.json({ message: "View count incremented" });
+});
+
+router.post('/saveGuide', async function (req, res, next) {
+  try {
+    console.log('saving guide:', req.body);
+    const savedGuide = await guides.create(req.body);
+    res.json(savedGuide);
+  } catch (error) {
+    console.error('Error saving guide:', error);
+    res.status(500).json({ message: 'Error saving guide' });
+  }
 });
 
 router.post('/signup', async function (req, res, next) {
