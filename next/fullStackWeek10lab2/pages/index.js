@@ -173,9 +173,24 @@ function HomePage() {
                         color: 'white',
                         textDecoration: 'none',
                         borderRadius: '4px',
-                        fontWeight: 'bold'
+                        fontWeight: 'bold',
+                        marginRight: '1rem'
                     }}>
                         Rent Properties
+                    </a>
+                </Link>
+
+                <Link href="/guides">
+                    <a style={{
+                        display: 'inline-block',
+                        padding: '1rem 2rem',
+                        backgroundColor: '#77002e',
+                        color: 'white',
+                        textDecoration: 'none',
+                        borderRadius: '4px',
+                        fontWeight: 'bold'
+                    }}>
+                        Property Guides
                     </a>
                 </Link>
             </div>
