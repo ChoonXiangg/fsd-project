@@ -19,6 +19,7 @@ function AllPropertiesPage() {
     const [filterCounty, setFilterCounty] = useState('');
     const [filterTimeAdded, setFilterTimeAdded] = useState('');
     const [filterListingType, setFilterListingType] = useState('Buy');
+    const [filterSearch, setFilterSearch] = useState('');
 
     // Initialize filters from URL query params
     useEffect(() => {
@@ -43,6 +44,7 @@ function AllPropertiesPage() {
                 setFilterTimeAdded(router.query.timeAdded);
             }
         }
+        if (router.query.search) setFilterSearch(router.query.search);
     }, [router.query]);
 
     useEffect(() => {
@@ -86,10 +88,19 @@ function AllPropertiesPage() {
                 const selectedDate = new Date(filterTimeAdded);
                 props = props.filter(p => new Date(p.dateAdded) >= selectedDate);
             }
+            if (filterSearch) {
+                const searchLower = filterSearch.toLowerCase();
+                props = props.filter(p =>
+                    (p.name && p.name.toLowerCase().includes(searchLower)) ||
+                    (p.address && p.address.toLowerCase().includes(searchLower)) ||
+                    (p.city && p.city.toLowerCase().includes(searchLower)) ||
+                    (p.county && p.county.toLowerCase().includes(searchLower))
+                );
+            }
 
             setFilteredProperties(props);
         }
-    }, [globalCtx.theGlobalObject.dataLoaded, globalCtx.theGlobalObject.buys, globalCtx.theGlobalObject.rents, filterType, filterSubtype, filterCity, filterCounty, filterMinPrice, filterMaxPrice, filterBedrooms, filterTimeAdded, filterListingType]);
+    }, [globalCtx.theGlobalObject.dataLoaded, globalCtx.theGlobalObject.buys, globalCtx.theGlobalObject.rents, filterType, filterSubtype, filterCity, filterCounty, filterMinPrice, filterMaxPrice, filterBedrooms, filterTimeAdded, filterListingType, filterSearch]);
 
     if (!globalCtx.theGlobalObject.dataLoaded) {
         return <div>Loading data from database, please wait . . . </div>
@@ -111,6 +122,14 @@ function AllPropertiesPage() {
                     <option value="Buy">For Sale</option>
                     <option value="Rent">For Rent</option>
                 </select>
+
+                <input
+                    type="text"
+                    placeholder="Search name/address..."
+                    value={filterSearch}
+                    onChange={(e) => setFilterSearch(e.target.value)}
+                    style={{ padding: '0.5rem', width: '200px' }}
+                />
 
                 <select value={filterType} onChange={(e) => {
                     setFilterType(e.target.value);
@@ -183,6 +202,7 @@ function AllPropertiesPage() {
                 </div>
 
                 <button onClick={() => {
+                    setFilterListingType('Buy'); // Optionally reset listing type too? Maybe better to keep it. Let's keep it.
                     setFilterType('');
                     setFilterSubtype('');
                     setFilterMinPrice('');
@@ -191,6 +211,7 @@ function AllPropertiesPage() {
                     setFilterCity('');
                     setFilterCounty('');
                     setFilterTimeAdded('');
+                    setFilterSearch('');
                     router.push('/properties', undefined, { shallow: true });
                 }} style={{
                     padding: '0.5rem 1rem',
