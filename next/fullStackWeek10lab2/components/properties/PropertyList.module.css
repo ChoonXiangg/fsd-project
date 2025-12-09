@@ -6,3 +6,12 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 2.5rem;
 }
+
+.listView {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
