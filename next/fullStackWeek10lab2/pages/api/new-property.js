@@ -1,8 +1,7 @@
 // /api/new-property
 
 async function handler(req, res) { // can be called anything you like
-  const endpoint = req.body.listingType === 'Rent' ? 'saveRent' : 'saveBuy';
-  const response = await fetch(`http://localhost:8000/${endpoint}`, {
+  const response = await fetch('http://localhost:8000/saveProperty', {
     method: 'POST',
     body: JSON.stringify(req.body),
     headers: {

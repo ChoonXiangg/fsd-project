@@ -18,6 +18,7 @@ function PropertyList(props) {
           bedrooms={property.bedrooms}
           floorSize={property.floorSize}
           verifiedAgent={property.verifiedAgent}
+          listingType={property.listingType}
         />
       ))}
     </ul>

@@ -18,7 +18,7 @@ function AllPropertiesPage() {
     const [filterCity, setFilterCity] = useState('');
     const [filterCounty, setFilterCounty] = useState('');
     const [filterTimeAdded, setFilterTimeAdded] = useState('');
-    const [filterListingType, setFilterListingType] = useState('Buy');
+    const [filterListingType, setFilterListingType] = useState('');
     const [filterSearch, setFilterSearch] = useState('');
 
     // Initialize filters from URL query params
@@ -49,14 +49,11 @@ function AllPropertiesPage() {
 
     useEffect(() => {
         if (globalCtx.theGlobalObject.dataLoaded) {
-            let props = [];
-            if (filterListingType === 'Buy') {
-                props = globalCtx.theGlobalObject.buys;
-            } else if (filterListingType === 'Rent') {
-                props = globalCtx.theGlobalObject.rents;
-            } else {
-                // Fallback or 'All' if we wanted that
-                props = [...globalCtx.theGlobalObject.buys, ...globalCtx.theGlobalObject.rents];
+            let props = globalCtx.theGlobalObject.properties;
+
+            // Filter by listing type (Buy/Rent)
+            if (filterListingType) {
+                props = props.filter(p => p.listingType === filterListingType);
             }
 
             if (filterType) {
@@ -100,7 +97,7 @@ function AllPropertiesPage() {
 
             setFilteredProperties(props);
         }
-    }, [globalCtx.theGlobalObject.dataLoaded, globalCtx.theGlobalObject.buys, globalCtx.theGlobalObject.rents, filterType, filterSubtype, filterCity, filterCounty, filterMinPrice, filterMaxPrice, filterBedrooms, filterTimeAdded, filterListingType, filterSearch]);
+    }, [globalCtx.theGlobalObject.dataLoaded, globalCtx.theGlobalObject.properties, filterType, filterSubtype, filterCity, filterCounty, filterMinPrice, filterMaxPrice, filterBedrooms, filterTimeAdded, filterListingType, filterSearch]);
 
     if (!globalCtx.theGlobalObject.dataLoaded) {
         return <div>Loading data from database, please wait . . . </div>
@@ -119,6 +116,7 @@ function AllPropertiesPage() {
                 alignItems: 'center'
             }}>
                 <select value={filterListingType} onChange={(e) => setFilterListingType(e.target.value)} style={{ padding: '0.5rem', fontWeight: 'bold' }}>
+                    <option value="">All Properties</option>
                     <option value="Buy">For Sale</option>
                     <option value="Rent">For Rent</option>
                 </select>
@@ -202,7 +200,7 @@ function AllPropertiesPage() {
                 </div>
 
                 <button onClick={() => {
-                    setFilterListingType('Buy'); // Optionally reset listing type too? Maybe better to keep it. Let's keep it.
+                    setFilterListingType('');
                     setFilterType('');
                     setFilterSubtype('');
                     setFilterMinPrice('');

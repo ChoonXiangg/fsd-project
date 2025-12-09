@@ -30,6 +30,25 @@
   font-weight: bold;
 }
 
+.listingTypeBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: white;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.listingTypeBadge.forSale {
+  background-color: #2563eb; /* Blue for Sale */
+}
+
+.listingTypeBadge.forRent {
+  background-color: #f59e0b; /* Orange for Rent */
+}
+
 .content {
   text-align: center;
   padding: 1rem;

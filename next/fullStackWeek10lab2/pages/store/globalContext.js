@@ -9,7 +9,7 @@ import { createContext, useState, useEffect } from 'react'
 const GlobalContext = createContext()
 
 export function GlobalContextProvider(props) {
-    const [globals, setGlobals] = useState({ aString: 'init val', count: 0, hideHamMenu: true, properties: [], buys: [], rents: [], guides: [], dataLoaded: false, user: null })
+    const [globals, setGlobals] = useState({ aString: 'init val', count: 0, hideHamMenu: true, properties: [], guides: [], dataLoaded: false, user: null })
 
     useEffect(() => {
         getAllProperties()
@@ -17,35 +17,20 @@ export function GlobalContextProvider(props) {
     }, []);
 
     async function getAllProperties() {
-        let buys = [];
-        let rents = [];
+        let properties = [];
         let guides = [];
 
         try {
-            const responseBuys = await fetch('/api/get-properties', {
-                method: 'POST',
-                body: JSON.stringify({ type: 'buys' }),
-                headers: { 'Content-Type': 'application/json' }
-            });
-            if (responseBuys.ok) {
-                const data = await responseBuys.json();
-                buys = data.buys || [];
-            }
-        } catch (error) {
-            console.error('Error fetching buys:', error);
-        }
-
-        try {
-            const responseRents = await fetch('/api/get-rents', {
+            const responseProperties = await fetch('/api/get-properties', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
-            if (responseRents.ok) {
-                const data = await responseRents.json();
-                rents = data.rents || [];
+            if (responseProperties.ok) {
+                const data = await responseProperties.json();
+                properties = data.properties || [];
             }
         } catch (error) {
-            console.error('Error fetching rents:', error);
+            console.error('Error fetching properties:', error);
         }
 
         try {
@@ -63,9 +48,7 @@ export function GlobalContextProvider(props) {
 
         setGlobals((previousGlobals) => {
             const newGlobals = JSON.parse(JSON.stringify(previousGlobals));
-            newGlobals.buys = buys;
-            newGlobals.rents = rents;
-            newGlobals.properties = [...buys, ...rents];
+            newGlobals.properties = properties;
             newGlobals.guides = guides;
             newGlobals.dataLoaded = true;
             return newGlobals
