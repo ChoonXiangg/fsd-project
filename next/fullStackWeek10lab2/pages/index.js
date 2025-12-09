@@ -6,7 +6,7 @@ import classes from '../styles/Home.module.css';
 
 function HomePage() {
     const router = useRouter();
-    const [searchType, setSearchType] = useState('Buy'); // Listing type: Buy/Rent
+    const [searchType, setSearchType] = useState('Buy');
     const [searchText, setSearchText] = useState('');
     const [searchPropertyType, setSearchPropertyType] = useState('');
     const [searchMinPrice, setSearchMinPrice] = useState('');
@@ -17,7 +17,7 @@ function HomePage() {
         const query = {
             listingType: searchType,
         };
-        if (searchText) query.searchTerm = searchText;
+        if (searchText) query.search = searchText;
         if (searchPropertyType) query.type = searchPropertyType;
         if (searchMinPrice) query.minPrice = searchMinPrice;
         if (searchMaxPrice) query.maxPrice = searchMaxPrice;
@@ -30,169 +30,100 @@ function HomePage() {
     };
 
     return (
-        <div style={{ textAlign: 'center', marginTop: '5rem' }}>
-            <h1>Welcome to Real Estate App</h1>
-            <p>Find your dream home today.</p>
+        <div className={classes.container}>
+            <div className={classes.hero}>
+                <div className={classes.heroContent}>
+                    <h1 className={classes.heroTitle}>Find a place you will call home</h1>
+                    <p className={classes.heroSubtitle}>
+                        With us you will find not just accommodation, but a place where your new life begins,
+                        full of coziness and possibilities.
+                    </p>
 
-            <div style={{
-                margin: '2rem auto',
-                padding: '1.5rem',
-                backgroundColor: 'white',
-                borderRadius: '8px',
-                maxWidth: '900px',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                display: 'flex',
-                gap: '1rem',
-                flexWrap: 'wrap',
-                justifyContent: 'center',
-                alignItems: 'center'
-            }}>
-                <select
-                    value={searchType}
-                    onChange={(e) => setSearchType(e.target.value)}
-                    style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc' }}
-                >
-                    <option value="Buy">Buy</option>
-                    <option value="Rent">Rent</option>
-                </select>
+                    <div className={classes.searchBar}>
+                        <select
+                            value={searchType}
+                            onChange={(e) => setSearchType(e.target.value)}
+                            className={classes.searchSelect}
+                        >
+                            <option value="Buy">Buy</option>
+                            <option value="Rent">Rent</option>
+                        </select>
 
-                <input
-                    type="text"
-                    placeholder="Search by name, address..."
-                    value={searchText}
-                    onChange={(e) => setSearchText(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                    style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc', minWidth: '200px', flex: 1 }}
-                />
+                        <input
+                            type="text"
+                            placeholder="Search by name, address..."
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                            className={classes.searchInput}
+                        />
 
-                <select
-                    value={searchPropertyType}
-                    onChange={(e) => setSearchPropertyType(e.target.value)}
-                    style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc' }}
-                >
-                    <option value="">All Types</option>
-                    <option value="Residential">Residential</option>
-                    <option value="Commercial">Commercial</option>
-                </select>
+                        <select
+                            value={searchPropertyType}
+                            onChange={(e) => setSearchPropertyType(e.target.value)}
+                            className={classes.searchSelect}
+                        >
+                            <option value="">All Types</option>
+                            <option value="Residential">Residential</option>
+                            <option value="Commercial">Commercial</option>
+                        </select>
 
-                <input
-                    type="number"
-                    placeholder="Min Price"
-                    value={searchMinPrice}
-                    onChange={(e) => setSearchMinPrice(e.target.value)}
-                    style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc', width: '120px' }}
-                />
+                        <input
+                            type="number"
+                            placeholder="Min Price"
+                            value={searchMinPrice}
+                            onChange={(e) => setSearchMinPrice(e.target.value)}
+                            className={classes.searchPriceInput}
+                        />
 
-                <input
-                    type="number"
-                    placeholder="Max Price"
-                    value={searchMaxPrice}
-                    onChange={(e) => setSearchMaxPrice(e.target.value)}
-                    style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc', width: '120px' }}
-                />
+                        <input
+                            type="number"
+                            placeholder="Max Price"
+                            value={searchMaxPrice}
+                            onChange={(e) => setSearchMaxPrice(e.target.value)}
+                            className={classes.searchPriceInput}
+                        />
 
-                <select
-                    value={searchBedrooms}
-                    onChange={(e) => setSearchBedrooms(e.target.value)}
-                    style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc' }}
-                >
-                    <option value="">Bedrooms</option>
-                    {bedroomOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                    ))}
-                </select>
+                        <select
+                            value={searchBedrooms}
+                            onChange={(e) => setSearchBedrooms(e.target.value)}
+                            className={classes.searchSelect}
+                        >
+                            <option value="">Bedrooms</option>
+                            {bedroomOptions.map(opt => (
+                                <option key={opt} value={opt}>{opt}</option>
+                            ))}
+                        </select>
 
-                <button
-                    onClick={handleSearch}
-                    style={{
-                        padding: '0.8rem 2rem',
-                        backgroundColor: '#77002e',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        fontWeight: 'bold',
-                        cursor: 'pointer'
-                    }}
-                >
-                    Search
-                </button>
-            </div>
+                        <button
+                            onClick={handleSearch}
+                            className={classes.searchButton}
+                        >
+                            Search
+                        </button>
+                    </div>
 
-            <div style={{ marginTop: '2rem' }}>
-                <Link href="/properties?type=Residential&maxPrice=500000">
-                    <a style={{
-                        display: 'inline-block',
-                        padding: '1rem 2rem',
-                        backgroundColor: '#1a2920',
-                        color: 'white',
-                        textDecoration: 'none',
-                        borderRadius: '4px',
-                        fontWeight: 'bold',
-                        marginRight: '1rem'
-                    }}>
-                        Find affordable homes under €500k
-                    </a>
-                </Link>
+                    <div className={classes.quickLinks}>
+                        <button onClick={() => router.push('/properties?type=Residential&maxPrice=500000')} className={classes.quickLink}>
+                            Find affordable homes under €500k
+                        </button>
+                        <button onClick={() => router.push('/properties?timeAdded=lastMonth')} className={classes.quickLink}>
+                            Explore new launches
+                        </button>
+                    </div>
 
-                <Link href="/properties?timeAdded=lastMonth">
-                    <a style={{
-                        display: 'inline-block',
-                        padding: '1rem 2rem',
-                        backgroundColor: '#77002e',
-                        color: 'white',
-                        textDecoration: 'none',
-                        borderRadius: '4px',
-                        fontWeight: 'bold'
-                    }}>
-                        Explore new launches
-                    </a>
-                </Link>
-            </div>
-
-            <div style={{ marginTop: '1rem' }}>
-                <Link href="/properties">
-                    <a style={{
-                        display: 'inline-block',
-                        padding: '1rem 2rem',
-                        backgroundColor: '#1a2920',
-                        color: 'white',
-                        textDecoration: 'none',
-                        borderRadius: '4px',
-                        fontWeight: 'bold',
-                        marginRight: '1rem'
-                    }}>
-                        Buy Properties
-                    </a>
-                </Link>
-
-                <Link href="/properties?listingType=Rent">
-                    <a style={{
-                        display: 'inline-block',
-                        padding: '1rem 2rem',
-                        backgroundColor: '#1a2920',
-                        color: 'white',
-                        textDecoration: 'none',
-                        borderRadius: '4px',
-                        fontWeight: 'bold',
-                        marginRight: '1rem'
-                    }}>
-                        Rent Properties
-                    </a>
-                </Link>
-
-                <Link href="/guides">
-                    <a style={{
-                        display: 'inline-block',
-                        padding: '1rem 2rem',
-                        backgroundColor: '#77002e',
-                        color: 'white',
-                        textDecoration: 'none',
-                        borderRadius: '4px',
-                        fontWeight: 'bold'
-                    }}>
-                        Property Guides
-                    </a>
-                </Link>
+                    <div className={classes.actionButtons}>
+                        <button onClick={() => router.push('/properties?listingType=Buy')} className={classes.actionButton}>
+                            Buy Properties
+                        </button>
+                        <button onClick={() => router.push('/properties?listingType=Rent')} className={classes.actionButton}>
+                            Rent Properties
+                        </button>
+                        <button onClick={() => router.push('/guides')} className={classes.actionButtonSecondary}>
+                            Property Guides
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );
