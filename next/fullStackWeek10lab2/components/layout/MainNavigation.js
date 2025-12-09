@@ -33,11 +33,6 @@ function MainNavigation() {
     <header className={classes.header}>
       <HamMenuContent contents={contents} />
       <HamMenu toggleMenuHide={() => toggleMenuHide()} />
-      {globalCtx.theGlobalObject.user && (
-        <div className={classes.userGreeting}>
-          Hi, {globalCtx.theGlobalObject.user.username}
-        </div>
-      )}
       <nav>
         <ul>
           <li>
@@ -97,6 +92,20 @@ function MainNavigation() {
           </li>
         </ul>
       </nav>
+      {globalCtx.theGlobalObject.user && (
+        <div className={classes.userGreeting} onClick={() => router.push('/profile')}>
+          <span className={classes.userName}>Hi, {globalCtx.theGlobalObject.user.username}!</span>
+          <div className={classes.userAvatar}>
+            {globalCtx.theGlobalObject.user.profilePicture ? (
+              <img src={globalCtx.theGlobalObject.user.profilePicture} alt={globalCtx.theGlobalObject.user.username} />
+            ) : (
+              <span className={classes.userInitials}>
+                {globalCtx.theGlobalObject.user.username.substring(0, 2).toUpperCase()}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 }

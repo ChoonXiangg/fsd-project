@@ -2,8 +2,10 @@ import PropertyItem from './PropertyItem';
 import classes from './PropertyList.module.css';
 
 function PropertyList(props) {
+  const viewMode = props.viewMode || 'grid';
+
   return (
-    <ul className={classes.list}>
+    <ul className={viewMode === 'grid' ? classes.list : classes.listView}>
       {props.properties.map((property) => (
         <PropertyItem
           key={property._id}
@@ -19,6 +21,7 @@ function PropertyList(props) {
           floorSize={property.floorSize}
           verifiedAgent={property.verifiedAgent}
           listingType={property.listingType}
+          viewMode={viewMode}
         />
       ))}
     </ul>

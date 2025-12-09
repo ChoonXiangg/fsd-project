@@ -37,8 +37,8 @@
 
 .detail img {
     width: 100%;
-    max-height: 400px;
-    object-fit: cover;
+    max-height: 500px;
+    object-fit: contain;
     border-radius: 8px;
     margin-bottom: 1rem;
 }
