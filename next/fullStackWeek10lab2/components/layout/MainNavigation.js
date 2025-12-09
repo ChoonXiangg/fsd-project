@@ -30,7 +30,7 @@ function MainNavigation() {
     contents.push({ title: 'Logout', action: 'logout' })
   }
   return (
-    <header className={classes.header}>
+    <header className={`${classes.header} ${classes.transparent}`}>
       <HamMenuContent contents={contents} />
       <HamMenu toggleMenuHide={() => toggleMenuHide()} />
       <nav>

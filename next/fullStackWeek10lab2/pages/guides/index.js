@@ -3,6 +3,7 @@ import GlobalContext from '../../pages/store/globalContext';
 import { guideCategories } from '../../data/guidesData'; // Keep categories static for UI consistency
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import styles from '../../styles/PageWrapper.module.css';
 
 function GuidesPage() {
     const globalCtx = useContext(GlobalContext);
@@ -42,10 +43,11 @@ function GuidesPage() {
     }
 
     return (
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem' }}>
+        <div className={styles.guidesWrapper}>
+            <div className={styles.guidesContent}>
             <div style={{ textAlign: 'center', marginBottom: '3rem', position: 'relative' }}>
-                <h1 style={{ fontSize: '2.5rem', color: '#1a2920', marginBottom: '1rem' }}>Property Guides</h1>
-                <p style={{ fontSize: '1.2rem', color: '#666' }}>Expert advice for every step of your property journey.</p>
+                <h1 style={{ fontSize: '2.5rem', color: 'white', marginBottom: '1rem', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>Property Guides</h1>
+                <p style={{ fontSize: '1.2rem', color: 'white', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>Expert advice for every step of your property journey.</p>
                 <div style={{ marginTop: '1rem' }}>
                     <Link href="/guides/add">
                         <a style={{
@@ -66,7 +68,7 @@ function GuidesPage() {
 
             {/* Categories Section - Now Buttons */}
             <section style={{ marginBottom: '4rem', textAlign: 'center' }}>
-                <h2 style={{ fontSize: '1.8rem', color: '#1a2920', marginBottom: '1.5rem', borderBottom: '2px solid #77002e', paddingBottom: '0.5rem', display: 'inline-block' }}>
+                <h2 style={{ fontSize: '1.8rem', color: 'white', marginBottom: '1.5rem', borderBottom: '2px solid #77002e', paddingBottom: '0.5rem', display: 'inline-block', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
                     Browse by Category
                 </h2>
                 <div style={{
@@ -119,7 +121,7 @@ function GuidesPage() {
 
             {/* Latest Guides Section */}
             <section style={{ marginBottom: '4rem' }}>
-                <h2 style={{ fontSize: '1.8rem', color: '#1a2920', marginBottom: '1.5rem', borderBottom: '2px solid #77002e', paddingBottom: '0.5rem', display: 'inline-block' }}>
+                <h2 style={{ fontSize: '1.8rem', color: 'white', marginBottom: '1.5rem', borderBottom: '2px solid #77002e', paddingBottom: '0.5rem', display: 'inline-block', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
                     {selectedCategory === 'All' ? 'Latest Guides' : `${selectedCategory} Guides`}
                 </h2>
                 {latestSorted.length === 0 ? (
@@ -132,10 +134,11 @@ function GuidesPage() {
                     }}>
                         {latestSorted.map(guide => (
                             <div key={guide._id} style={{
-                                backgroundColor: 'white',
+                                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                backdropFilter: 'blur(10px)',
                                 borderRadius: '8px',
                                 overflow: 'hidden',
-                                boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
                                 display: 'flex',
                                 flexDirection: 'column'
                             }}>
@@ -182,7 +185,7 @@ function GuidesPage() {
 
             {/* Popular Reading Section */}
             <section>
-                <h2 style={{ fontSize: '1.8rem', color: '#1a2920', marginBottom: '1.5rem', borderBottom: '2px solid #77002e', paddingBottom: '0.5rem', display: 'inline-block' }}>
+                <h2 style={{ fontSize: '1.8rem', color: 'white', marginBottom: '1.5rem', borderBottom: '2px solid #77002e', paddingBottom: '0.5rem', display: 'inline-block', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
                     Popular Reading
                 </h2>
                 <div style={{
@@ -193,11 +196,12 @@ function GuidesPage() {
                     {popularGuides.map((guide, index) => (
                         <div key={guide._id} style={{
                             display: 'flex',
-                            backgroundColor: 'white',
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            backdropFilter: 'blur(10px)',
                             borderRadius: '8px',
                             padding: '1rem',
                             alignItems: 'center',
-                            boxShadow: '0 2px 6px rgba(0,0,0,0.05)'
+                            boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
                         }}>
                             <div style={{
                                 fontSize: '1.5rem',
@@ -237,6 +241,7 @@ function GuidesPage() {
                     ))}
                 </div>
             </section>
+            </div>
         </div>
     );
 }

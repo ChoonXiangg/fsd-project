@@ -4,9 +4,13 @@
   box-sizing: border-box;
 }
 
+html,
 body {
   font-family: 'Open Sans', 'Lato', sans-serif;
   margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 h1,
