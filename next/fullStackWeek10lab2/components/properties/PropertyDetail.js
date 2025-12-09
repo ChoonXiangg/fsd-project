@@ -74,6 +74,11 @@ function PropertyDetail(props) {
             {props.verifiedAgent && (
                 <p className={classes.verifiedBadge}>✓ Verified Agent Listing</p>
             )}
+            {props.listingType && (
+                <p className={`${classes.listingTypeBadge} ${props.listingType === 'Buy' ? classes.forSale : classes.forRent}`}>
+                    {props.listingType === 'Buy' ? '🏠 For Sale' : '🔑 For Rent'}
+                </p>
+            )}
             <p className={classes.type}>{props.propertyType} - {props.propertySubtype}</p>
             <address>{props.address}, {props.city}, {props.county}</address>
             <p className={classes.price}>€{Number(props.price).toLocaleString()}</p>

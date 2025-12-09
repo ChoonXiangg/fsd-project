@@ -30,6 +30,7 @@ export default function () {
                 creatorPhoneNumber={temp.creatorPhoneNumber}
                 starredBy={temp.starredBy || []}
                 dateAdded={temp.dateAdded}
+                listingType={temp.listingType}
             />
         }
     }

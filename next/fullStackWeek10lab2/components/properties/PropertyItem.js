@@ -15,7 +15,12 @@ function PropertyItem(props) {
         <div className={classes.image}>
           <img src={props.image} alt={props.name} />
           {props.verifiedAgent && (
-            <span className={classes.verifiedBadge}>✓ Verified Agent</span>
+            <span className={classes.verifiedBadge}>✓ Verified</span>
+          )}
+          {props.listingType && (
+            <span className={`${classes.listingTypeBadge} ${props.listingType === 'Buy' ? classes.forSale : classes.forRent}`}>
+              {props.listingType === 'Buy' ? 'For Sale' : 'For Rent'}
+            </span>
           )}
         </div>
         <div className={classes.content}>

@@ -26,10 +26,9 @@ let propertySchema = new Schema({
   creatorEmail: String,
   creatorPhoneNumber: String,
   starredBy: [String], // Array of user IDs who have starred this property
+  listingType: String, // 'Buy' or 'Rent'
   dateAdded: { type: Date, default: Date.now }
 }, { collection: 'properties' });
-
-// ... (existing code: imports and connections)
 
 let userSchema = new Schema({
   username: { type: String, unique: true },
@@ -50,8 +49,7 @@ let guideSchema = new Schema({
   readTime: String,
 }, { collection: 'guides' });
 
-let buys = oldMong.model('buys', propertySchema);
-let rents = oldMong.model('rents', propertySchema);
+let properties = oldMong.model('properties', propertySchema);
 let users = oldMong.model('users', userSchema);
 let guides = oldMong.model('guides', guideSchema);
 
@@ -59,26 +57,15 @@ router.get('/', async function (req, res, next) {
   res.render('index');
 });
 
-router.post('/getBuys', async function (req, res, next) {
-  const allBuys = await buys.find().lean();
-  res.json({ buys: allBuys });
+router.post('/getProperties', async function (req, res, next) {
+  const allProperties = await properties.find().lean();
+  res.json({ properties: allProperties });
 });
 
-router.post('/getRents', async function (req, res, next) {
-  const allRents = await rents.find().lean();
-  res.json({ rents: allRents });
-});
-
-router.post('/saveBuy', async function (req, res, next) {
-  console.log('saving buy:', req.body);
-  const savedBuy = await buys.create(req.body);
-  res.json(savedBuy);
-});
-
-router.post('/saveRent', async function (req, res, next) {
-  console.log('saving rent:', req.body);
-  const savedRent = await rents.create(req.body);
-  res.json(savedRent);
+router.post('/saveProperty', async function (req, res, next) {
+  console.log('saving property:', req.body);
+  const savedProperty = await properties.create(req.body);
+  res.json(savedProperty);
 });
 
 router.get('/getGuides', async function (req, res, next) {
