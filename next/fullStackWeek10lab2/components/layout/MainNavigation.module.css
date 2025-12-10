@@ -20,11 +20,17 @@
 }
 
 .blackNav a {
-  color: #000000;
+  color: #000000 !important;
 }
 
 .blackNav a::after {
   background-color: #000000;
+}
+
+.blackNav a:hover,
+.blackNav a:active,
+.blackNav a.active {
+  color: #000000 !important;
 }
 
 .blackNav .userGreeting {
@@ -106,7 +112,6 @@
 .header a:hover,
 .header a:active,
 .header a.active {
-  color: white;
   transform: translateY(-2px);
 }
 

@@ -10,6 +10,7 @@ function AllPropertiesPage() {
     const router = useRouter();
     const [filteredProperties, setFilteredProperties] = useState([]);
     const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+    const [showMoreOptions, setShowMoreOptions] = useState(false); // For expandable filters
 
     // Filter states
     const [filterType, setFilterType] = useState('');
@@ -151,7 +152,7 @@ function AllPropertiesPage() {
             <div className={styles.filterContainer}>
                 {/* Tabs */}
                 <div className={styles.tabs}>
-                    {['Buy', 'Rent'].map(tab => (
+                    {['Buy', 'Rent', 'New developments', 'Commercial properties'].map(tab => (
                         <button
                             key={tab}
                             className={`${styles.tab} ${activeTab === tab ? styles.activeTab : ''}`}
@@ -162,7 +163,7 @@ function AllPropertiesPage() {
                     ))}
                 </div>
 
-                {/* Filter Row */}
+                {/* Filter Row - Always Visible */}
                 <div className={styles.filterRow}>
                     <div className={styles.filterGroup}>
                         <select
@@ -170,21 +171,8 @@ function AllPropertiesPage() {
                             onChange={(e) => setFilterCounty(e.target.value)}
                             className={styles.filterSelect}
                         >
-                            <option value="">All Counties</option>
+                            <option value="">All countries</option>
                             {counties.map(c => <option key={c} value={c}>{c}</option>)}
-                        </select>
-                    </div>
-
-                    <div className={styles.filterGroup}>
-                        <select
-                            value={filterCity}
-                            onChange={(e) => setFilterCity(e.target.value)}
-                            className={styles.filterSelect}
-                        >
-                            <option value="">All Cities</option>
-                            {(filterCounty ? (citiesByCounty[filterCounty] || []) : cities).map(city => (
-                                <option key={city} value={city}>{city}</option>
-                            ))}
                         </select>
                     </div>
 
@@ -194,53 +182,79 @@ function AllPropertiesPage() {
                             onChange={(e) => setFilterType(e.target.value)}
                             className={styles.filterSelect}
                         >
-                            <option value="">Property Types</option>
+                            <option value="">New property</option>
                             <option value="Residential">Residential</option>
                             <option value="Commercial">Commercial</option>
                         </select>
                     </div>
 
                     <div className={styles.filterGroup}>
-                        <div className={styles.priceSelectPlaceholder}>
-                            {filterMinPrice || filterMaxPrice ?
-                                `€${filterMinPrice || '0'} - €${filterMaxPrice || 'Any'}` :
-                                'Price Range'}
-                        </div>
-                        {/* Simplified price inputs for functionality within the new UI style */}
-                        <div className={styles.priceDropdown}>
-                            <input
-                                type="number"
-                                placeholder="Min"
-                                value={filterMinPrice}
-                                onChange={(e) => setFilterMinPrice(e.target.value)}
-                                className={styles.miniInput}
-                            />
-                            <span>-</span>
-                            <input
-                                type="number"
-                                placeholder="Max"
-                                value={filterMaxPrice}
-                                onChange={(e) => setFilterMaxPrice(e.target.value)}
-                                className={styles.miniInput}
-                            />
-                        </div>
-                    </div>
-
-                    <div className={styles.filterGroup}>
                         <select
-                            value={filterBedrooms}
-                            onChange={(e) => setFilterBedrooms(e.target.value)}
+                            value={`${filterMinPrice}-${filterMaxPrice}`}
+                            onChange={(e) => {
+                                const [min, max] = e.target.value.split('-');
+                                setFilterMinPrice(min);
+                                setFilterMaxPrice(max);
+                            }}
                             className={styles.filterSelect}
                         >
-                            <option value="">All sizes (m²)</option> {/* Label match, mapping to bedrooms for now as size data varies */}
-                            {bedroomOptions.map(opt => <option key={opt} value={opt}>{opt} Beds</option>)}
+                            <option value="-">$280,000-$500,000</option>
+                            <option value="0-100000">$0-$100,000</option>
+                            <option value="100000-250000">$100,000-$250,000</option>
+                            <option value="250000-500000">$250,000-$500,000</option>
+                            <option value="500000-1000000">$500,000-$1,000,000</option>
+                            <option value="1000000-">$1,000,000+</option>
                         </select>
                     </div>
+
+                    {filterType !== 'Commercial' && (
+                        <div className={styles.filterGroup}>
+                            <select
+                                value={filterBedrooms}
+                                onChange={(e) => setFilterBedrooms(e.target.value)}
+                                className={styles.filterSelect}
+                            >
+                                <option value="">Rooms</option>
+                                {bedroomOptions.map(opt => <option key={opt} value={opt}>{opt} Beds</option>)}
+                            </select>
+                        </div>
+                    )}
                 </div>
+
+                {/* Expandable More Options Section */}
+                {showMoreOptions && (
+                    <div className={styles.moreOptionsSection}>
+                        <div className={styles.filterRow}>
+                            <div className={styles.filterGroup}>
+                                <select
+                                    value={filterCity}
+                                    onChange={(e) => setFilterCity(e.target.value)}
+                                    className={styles.filterSelect}
+                                >
+                                    <option value="">All Cities</option>
+                                    {(filterCounty ? (citiesByCounty[filterCounty] || []) : cities).map(city => (
+                                        <option key={city} value={city}>{city}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className={styles.filterGroup}>
+                                <select className={styles.filterSelect}>
+                                    <option value="">Additional filters...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Action Row */}
                 <div className={styles.actionRow}>
                     <div className={styles.leftActions}>
+                        <button
+                            className={styles.moreOptionsButton}
+                            onClick={() => setShowMoreOptions(!showMoreOptions)}
+                        >
+                            + More options
+                        </button>
                     </div>
                     <div className={styles.rightActions}>
                         <button className={styles.textButton} onClick={clearFilters}>
@@ -262,9 +276,7 @@ function AllPropertiesPage() {
                         No properties found matching your criteria.
                     </div>
                 ) : (
-                    <div className={styles.propertiesGrid}>
-                        <PropertyList properties={filteredProperties} viewMode="grid" />
-                    </div>
+                    <PropertyList properties={filteredProperties} viewMode="grid" />
                 )}
             </div>
         </div>

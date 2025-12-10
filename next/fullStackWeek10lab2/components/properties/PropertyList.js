@@ -12,6 +12,7 @@ function PropertyList(props) {
           id={property._id}
           name={property.name}
           image={property.image}
+          address={property.address}
           city={property.city}
           county={property.county}
           price={property.price}
