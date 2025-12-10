@@ -6,12 +6,7 @@
   padding: 0;
   padding-top: 8rem;
   padding-bottom: 3rem;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)),
-              url('https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
+  background-color: #f5f5f5;
   overflow-x: hidden;
   display: flex;
   justify-content: center;
@@ -38,12 +33,7 @@
   padding: 0;
   padding-top: 8rem;
   padding-bottom: 3rem;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)),
-              url('https://images.unsplash.com/photo-1554469384-e58fac16e23a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
+  background-color: #f5f5f5;
   overflow-x: hidden;
 }
 

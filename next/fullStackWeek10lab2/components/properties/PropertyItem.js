@@ -46,31 +46,32 @@ function PropertyItem(props) {
   }
 
   return (
-    <li className={classes.item}>
-      <Card>
-        <div className={classes.image}>
-          <img src={props.image} alt={props.name} />
-          {props.verifiedAgent && (
-            <span className={classes.verifiedBadge}>✓ Verified</span>
-          )}
-          {props.listingType && (
-            <span className={`${classes.listingTypeBadge} ${props.listingType === 'Buy' ? classes.forSale : classes.forRent}`}>
-              {props.listingType === 'Buy' ? 'For Sale' : 'For Rent'}
+    <li className={classes.item} onClick={showDetailsHandler}>
+      <div className={classes.image}>
+        <img src={props.image} alt={props.name} />
+        {props.listingType && (
+          <span className={`${classes.listingTypeBadge} ${props.listingType === 'Buy' ? classes.forSale : classes.forRent}`}>
+            {props.listingType === 'Buy' ? 'For Sale' : 'For Rent'}
+          </span>
+        )}
+      </div>
+      <div className={classes.content}>
+        <div className={classes.titleRow}>
+          <h3>{props.name}</h3>
+          <p className={classes.price}>${Number(props.price).toLocaleString()}</p>
+        </div>
+        <address>{props.address}, {props.county}</address>
+        <div className={classes.details}>
+          <span className={classes.detailItem}>
+            {props.floorSize} m²
+          </span>
+          {props.bedrooms && (
+            <span className={classes.detailItem}>
+              {props.bedrooms} rooms
             </span>
           )}
         </div>
-        <div className={classes.content}>
-          <h3>{props.name}</h3>
-          <p className={classes.type}>{props.propertyType} - {props.propertySubtype}</p>
-          <address>{props.city}, {props.county}</address>
-          <p className={classes.price}>€{Number(props.price).toLocaleString()}</p>
-          {props.bedrooms && <p className={classes.bedrooms}>{props.bedrooms} Bedrooms</p>}
-          <p className={classes.floorSize}>{props.floorSize} m²</p>
-        </div>
-        <div className={classes.actions}>
-          <button onClick={showDetailsHandler}>Show Details</button>
-        </div>
-      </Card>
+      </div>
     </li>
   );
 }
