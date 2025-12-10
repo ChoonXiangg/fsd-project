@@ -52,7 +52,7 @@
 }
 
 .content {
-  text-align: center;
+  text-align: left;
   padding: 1rem;
   padding-bottom: 0.5rem;
   flex: 1;
@@ -86,7 +86,7 @@
 
 .actions {
   padding: 0.5rem 1rem 1rem 1rem;
-  text-align: center;
+  text-align: left;
 }
 
 .actions button {

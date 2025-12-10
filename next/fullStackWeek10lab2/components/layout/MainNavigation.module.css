@@ -10,6 +10,44 @@
   z-index: 100;
 }
 
+.blackNav.header {
+  background-color: transparent;
+}
+
+.blackNav .logo {
+  color: #000000;
+  text-shadow: none;
+}
+
+.blackNav a {
+  color: #000000;
+}
+
+.blackNav a::after {
+  background-color: #000000;
+}
+
+.blackNav .userGreeting {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.blackNav .userGreeting:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.blackNav .userName {
+  color: #000000;
+}
+
+.blackNav .userInitials {
+  color: #000000;
+}
+
+.blackNav .userAvatar {
+  border-color: #000000;
+  background-color: #f0f0f0;
+}
+
 .header.transparent {
   background-color: transparent;
   position: absolute;
