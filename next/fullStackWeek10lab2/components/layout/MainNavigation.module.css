@@ -4,10 +4,48 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color:  #1a2920;
+  background-color: transparent;
   padding: 0 10%;
   position: relative;
   z-index: 100;
+}
+
+.blackNav.header {
+  background-color: transparent;
+}
+
+.blackNav .logo {
+  color: #000000;
+  text-shadow: none;
+}
+
+.blackNav a {
+  color: #000000;
+}
+
+.blackNav a::after {
+  background-color: #000000;
+}
+
+.blackNav .userGreeting {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.blackNav .userGreeting:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.blackNav .userName {
+  color: #000000;
+}
+
+.blackNav .userInitials {
+  color: #000000;
+}
+
+.blackNav .userAvatar {
+  border-color: #000000;
+  background-color: #f0f0f0;
 }
 
 .header.transparent {
@@ -57,7 +95,7 @@
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #77002e;
+  background-color: #ffffff;
   transition: width 0.3s ease;
 }
 
@@ -110,7 +148,7 @@
   height: 36px;
   border-radius: 50%;
   overflow: hidden;
-  background-color: #77002e;
+  background-color: #333333;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -160,6 +198,7 @@
     opacity: 0;
     transform: translateX(-50%) translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
@@ -172,12 +211,12 @@
 
 .dropdownColumn h3 {
   margin: 0 0 1.25rem 0;
-  color: #1a2920;
+  color: #000000;
   font-size: 1.1rem;
   font-weight: 700;
   font-family: 'Lato', sans-serif;
   letter-spacing: 0.3px;
-  border-bottom: 2px solid #77002e;
+  border-bottom: 2px solid #000000;
   padding-bottom: 0.5rem;
 }
 
@@ -207,14 +246,14 @@
 }
 
 .dropdownColumn a:hover {
-  color: #77002e;
+  color: #000000;
   padding-left: 0.5rem;
 }
 
 .viewAll {
   display: block;
   margin-top: 1rem;
-  color: #77002e !important;
+  color: #000000 !important;
   font-weight: 600;
   font-family: 'Open Sans', sans-serif;
   letter-spacing: 0.3px;

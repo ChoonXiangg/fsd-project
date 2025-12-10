@@ -111,161 +111,162 @@ function AllPropertiesPage() {
         router.push('/properties', undefined, { shallow: true });
     };
 
+    const [activeTab, setActiveTab] = useState('Buy');
+
+    // Update filters based on active tab
+    useEffect(() => {
+        if (activeTab === 'Buy') {
+            setFilterListingType('Buy');
+            setFilterType('');
+        } else if (activeTab === 'Rent') {
+            setFilterListingType('Rent');
+            setFilterType('');
+        } else if (activeTab === 'Commercial properties') {
+            setFilterType('Commercial');
+            setFilterListingType('');
+        } else {
+            // New developments or other
+            setFilterListingType('');
+            setFilterType('');
+        }
+    }, [activeTab]);
+
     if (!globalCtx.theGlobalObject.dataLoaded) {
         return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading properties...</div>
     }
 
     return (
         <div className={styles.container}>
-            {/* Left Sidebar - Filters */}
-            <aside className={styles.sidebar}>
-                <h2>Filters</h2>
-
-                {/* Search */}
-                <div className={styles.filterSection}>
-                    <h3>Search</h3>
-                    <input
-                        type="text"
-                        placeholder="Search by name, address..."
-                        value={filterSearch}
-                        onChange={(e) => setFilterSearch(e.target.value)}
-                    />
-                </div>
-
-                {/* Listing Type */}
-                <div className={styles.filterSection}>
-                    <h3>Listing Type</h3>
-                    <select value={filterListingType} onChange={(e) => setFilterListingType(e.target.value)}>
-                        <option value="">All Properties</option>
-                        <option value="Buy">For Sale</option>
-                        <option value="Rent">For Rent</option>
-                    </select>
-                </div>
-
-                {/* Property Type */}
-                <div className={styles.filterSection}>
-                    <h3>Property Type</h3>
-                    <select value={filterType} onChange={(e) => {
-                        setFilterType(e.target.value);
-                        setFilterSubtype('');
-                    }}>
-                        <option value="">All Types</option>
-                        <option value="Residential">Residential</option>
-                        <option value="Commercial">Commercial</option>
-                    </select>
-
-                    {filterType && (
-                        <select value={filterSubtype} onChange={(e) => setFilterSubtype(e.target.value)}>
-                            <option value="">All Subtypes</option>
-                            {propertyTypes[filterType].map(st => (
-                                <option key={st} value={st}>{st}</option>
-                            ))}
-                        </select>
-                    )}
-                </div>
-
-                {/* Price Range */}
-                <div className={styles.filterSection}>
-                    <h3>Price Range</h3>
-                    <div className={styles.priceInputs}>
-                        <input
-                            type="number"
-                            placeholder="Min"
-                            value={filterMinPrice}
-                            onChange={(e) => setFilterMinPrice(e.target.value)}
-                        />
-                        <input
-                            type="number"
-                            placeholder="Max"
-                            value={filterMaxPrice}
-                            onChange={(e) => setFilterMaxPrice(e.target.value)}
-                        />
+            {/* Header Section */}
+            <div className={styles.pageHeader}>
+                <div className={styles.headerContent}>
+                    <h1 className={styles.pageTitle}>We help you find the<br />home that will be yours</h1>
+                    <div className={styles.headerDescription}>
+                        <p>Our projects are about harmony, style and<br />care that everyone lives in what is really<br />important to them.</p>
                     </div>
                 </div>
+            </div>
 
-                {/* Location */}
-                <div className={styles.filterSection}>
-                    <h3>Location</h3>
-                    <select value={filterCounty} onChange={(e) => {
-                        setFilterCounty(e.target.value);
-                        setFilterCity('');
-                    }}>
-                        <option value="">All Counties</option>
-                        {counties.map(county => (
-                            <option key={county} value={county}>{county}</option>
-                        ))}
-                    </select>
-
-                    <select value={filterCity} onChange={(e) => setFilterCity(e.target.value)}>
-                        <option value="">All Cities</option>
-                        {(filterCounty ? (citiesByCounty[filterCounty] || []) : cities).map(city => (
-                            <option key={city} value={city}>{city}</option>
-                        ))}
-                    </select>
+            {/* Filter Section */}
+            <div className={styles.filterContainer}>
+                {/* Tabs */}
+                <div className={styles.tabs}>
+                    {['Buy', 'Rent'].map(tab => (
+                        <button
+                            key={tab}
+                            className={`${styles.tab} ${activeTab === tab ? styles.activeTab : ''}`}
+                            onClick={() => setActiveTab(tab)}
+                        >
+                            {tab}
+                        </button>
+                    ))}
                 </div>
 
-                {/* Bedrooms (only for Residential) */}
-                {filterType === 'Residential' && (
-                    <div className={styles.filterSection}>
-                        <h3>Bedrooms</h3>
-                        <select value={filterBedrooms} onChange={(e) => setFilterBedrooms(e.target.value)}>
-                            <option value="">Any</option>
-                            {bedroomOptions.map(opt => (
-                                <option key={opt} value={opt}>{opt}</option>
+                {/* Filter Row */}
+                <div className={styles.filterRow}>
+                    <div className={styles.filterGroup}>
+                        <select
+                            value={filterCounty}
+                            onChange={(e) => setFilterCounty(e.target.value)}
+                            className={styles.filterSelect}
+                        >
+                            <option value="">All Counties</option>
+                            {counties.map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                    </div>
+
+                    <div className={styles.filterGroup}>
+                        <select
+                            value={filterCity}
+                            onChange={(e) => setFilterCity(e.target.value)}
+                            className={styles.filterSelect}
+                        >
+                            <option value="">All Cities</option>
+                            {(filterCounty ? (citiesByCounty[filterCounty] || []) : cities).map(city => (
+                                <option key={city} value={city}>{city}</option>
                             ))}
                         </select>
                     </div>
-                )}
 
-                {/* Date Added */}
-                <div className={styles.filterSection}>
-                    <h3>Added After</h3>
-                    <input
-                        type="date"
-                        value={filterTimeAdded}
-                        onChange={(e) => setFilterTimeAdded(e.target.value)}
-                    />
+                    <div className={styles.filterGroup}>
+                        <select
+                            value={filterType}
+                            onChange={(e) => setFilterType(e.target.value)}
+                            className={styles.filterSelect}
+                        >
+                            <option value="">Property Types</option>
+                            <option value="Residential">Residential</option>
+                            <option value="Commercial">Commercial</option>
+                        </select>
+                    </div>
+
+                    <div className={styles.filterGroup}>
+                        <div className={styles.priceSelectPlaceholder}>
+                            {filterMinPrice || filterMaxPrice ?
+                                `€${filterMinPrice || '0'} - €${filterMaxPrice || 'Any'}` :
+                                'Price Range'}
+                        </div>
+                        {/* Simplified price inputs for functionality within the new UI style */}
+                        <div className={styles.priceDropdown}>
+                            <input
+                                type="number"
+                                placeholder="Min"
+                                value={filterMinPrice}
+                                onChange={(e) => setFilterMinPrice(e.target.value)}
+                                className={styles.miniInput}
+                            />
+                            <span>-</span>
+                            <input
+                                type="number"
+                                placeholder="Max"
+                                value={filterMaxPrice}
+                                onChange={(e) => setFilterMaxPrice(e.target.value)}
+                                className={styles.miniInput}
+                            />
+                        </div>
+                    </div>
+
+                    <div className={styles.filterGroup}>
+                        <select
+                            value={filterBedrooms}
+                            onChange={(e) => setFilterBedrooms(e.target.value)}
+                            className={styles.filterSelect}
+                        >
+                            <option value="">All sizes (m²)</option> {/* Label match, mapping to bedrooms for now as size data varies */}
+                            {bedroomOptions.map(opt => <option key={opt} value={opt}>{opt} Beds</option>)}
+                        </select>
+                    </div>
                 </div>
 
-                <button className={styles.clearButton} onClick={clearFilters}>
-                    Clear All Filters
-                </button>
-            </aside>
-
-            {/* Main Content */}
-            <main className={styles.mainContent}>
-                {/* Header with count and view toggles */}
-                <div className={styles.header}>
-                    <div className={styles.resultCount}>
-                        {filteredProperties.length} {filteredProperties.length === 1 ? 'Property' : 'Properties'}
+                {/* Action Row */}
+                <div className={styles.actionRow}>
+                    <div className={styles.leftActions}>
                     </div>
-                    <div className={styles.viewToggles}>
-                        <button
-                            className={`${styles.viewButton} ${viewMode === 'grid' ? styles.active : ''}`}
-                            onClick={() => setViewMode('grid')}
-                        >
-                            Grid View
+                    <div className={styles.rightActions}>
+                        <button className={styles.textButton} onClick={clearFilters}>
+                            <span className={styles.icon}>🗑</span> Clear filters
                         </button>
-                        <button
-                            className={`${styles.viewButton} ${viewMode === 'list' ? styles.active : ''}`}
-                            onClick={() => setViewMode('list')}
-                        >
-                            List View
+                        <button className={styles.showPropertiesButton}>
+                            Show properties
                         </button>
                     </div>
                 </div>
+            </div>
 
-                {/* Properties Display */}
+            {/* Properties Grid Section */}
+            <div className={styles.resultsSection}>
+                <h2 className={styles.sectionTitle}>New properties</h2>
+
                 {filteredProperties.length === 0 ? (
                     <div className={styles.noResults}>
                         No properties found matching your criteria.
                     </div>
                 ) : (
-                    <div className={viewMode === 'grid' ? styles.propertiesGrid : styles.propertiesList}>
-                        <PropertyList properties={filteredProperties} viewMode={viewMode} />
+                    <div className={styles.propertiesGrid}>
+                        <PropertyList properties={filteredProperties} viewMode="grid" />
                     </div>
                 )}
-            </main>
+            </div>
         </div>
     );
 }
