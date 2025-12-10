@@ -42,11 +42,13 @@
 }
 
 .listingTypeBadge.forSale {
-  background-color: #2563eb; /* Blue for Sale */
+  background-color: #2563eb;
+  /* Blue for Sale */
 }
 
 .listingTypeBadge.forRent {
-  background-color: #f59e0b; /* Orange for Rent */
+  background-color: #f59e0b;
+  /* Orange for Rent */
 }
 
 .content {
