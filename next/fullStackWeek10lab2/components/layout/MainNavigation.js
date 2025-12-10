@@ -21,6 +21,7 @@ function MainNavigation() {
   const contents = [
     { title: 'Home', webAddress: '/' },
     { title: 'All Properties', webAddress: '/properties' },
+    { title: 'All Guides', webAddress: '/guides' },
     { title: 'Add New Property', webAddress: '/new-property' },
   ]
 
@@ -86,6 +87,9 @@ function MainNavigation() {
                 </div>
               </div>
             )}
+          </li>
+          <li>
+            <Link href='/guides'>All Guides</Link>
           </li>
           <li>
             <Link href='/new-property'>Add New Property</Link>

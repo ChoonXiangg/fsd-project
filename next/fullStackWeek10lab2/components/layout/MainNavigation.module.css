@@ -20,7 +20,10 @@
 .logo {
   font-size: 2rem;
   color: white;
-  font-weight: bold;
+  font-weight: 700;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .header ul {
@@ -28,7 +31,7 @@
   margin: 0;
   padding: 0;
   display: flex;
-  align-items: baseline;
+  align-items: center;
 }
 
 .header li {
@@ -37,14 +40,40 @@
 
 .header a {
   text-decoration: none;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   color: white;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: all 0.3s ease;
+  position: relative;
+  padding-bottom: 5px;
+}
+
+.header a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #77002e;
+  transition: width 0.3s ease;
+}
+
+.header a:hover::after {
+  width: 100%;
 }
 
 .header a:hover,
 .header a:active,
 .header a.active {
   color: white;
+  transform: translateY(-2px);
+}
+
+.header a.active::after {
+  width: 100%;
 }
 
 .userGreeting {
@@ -68,7 +97,9 @@
 .userName {
   color: white;
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 600;
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 0.3px;
   white-space: nowrap;
   margin: 0;
   padding: 0;
@@ -99,12 +130,12 @@
   color: white;
   font-size: 0.85rem;
   font-weight: 700;
+  font-family: 'Lato', sans-serif;
 }
 
 /* Dropdown Menu Styles */
 .dropdownContainer {
   position: relative;
-  padding-bottom: 0.5rem;
 }
 
 .dropdownMenu {
@@ -143,7 +174,9 @@
   margin: 0 0 1.25rem 0;
   color: #1a2920;
   font-size: 1.1rem;
-  font-weight: bold;
+  font-weight: 700;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 0.3px;
   border-bottom: 2px solid #77002e;
   padding-bottom: 0.5rem;
 }
@@ -164,14 +197,18 @@
 .dropdownColumn a {
   color: #333;
   font-size: 0.95rem;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.2px;
   text-decoration: none;
-  transition: color 0.2s;
+  transition: all 0.2s;
   display: block;
   padding: 0.25rem 0;
 }
 
 .dropdownColumn a:hover {
   color: #77002e;
+  padding-left: 0.5rem;
 }
 
 .viewAll {
@@ -179,9 +216,12 @@
   margin-top: 1rem;
   color: #77002e !important;
   font-weight: 600;
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 0.3px;
   font-size: 0.9rem !important;
 }
 
 .viewAll:hover {
   text-decoration: underline;
+  padding-left: 0.5rem !important;
 }
