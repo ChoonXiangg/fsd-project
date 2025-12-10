@@ -16,6 +16,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -37,6 +38,7 @@
     transform: translateY(-50px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -78,7 +80,7 @@
 }
 
 .loginButton {
-  background-color: #1a2920;
+  background-color: #000000;
   color: white;
   border: none;
   padding: 0.75rem 2rem;
@@ -92,7 +94,7 @@
 }
 
 .signupButton {
-  background-color: #1a2920;
+  background-color: #000000;
   color: white;
   border: none;
   padding: 0.75rem 2rem;
@@ -107,7 +109,7 @@
 
 .loginButton:hover,
 .signupButton:hover {
-  background-color: #2d4338;
+  background-color: #333333;
 }
 
 .backButton {
@@ -149,7 +151,7 @@
 
 .formGroup input:focus {
   outline: none;
-  border-color: #1a2920;
+  border-color: #000000;
 }
 
 .checkboxGroup {
@@ -171,7 +173,7 @@
 }
 
 .submitButton {
-  background-color: #1a2920;
+  background-color: #000000;
   color: white;
   border: none;
   padding: 0.75rem 2rem;
@@ -185,7 +187,7 @@
 }
 
 .submitButton:hover:not(:disabled) {
-  background-color: #2d4338;
+  background-color: #333333;
 }
 
 .submitButton:disabled {

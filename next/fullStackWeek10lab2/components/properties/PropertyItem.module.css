@@ -90,8 +90,8 @@
 .actions button {
   font: inherit;
   cursor: pointer;
-  color: #1a2920;
-  border: 1px solid #77002e;
+  color: #000000;
+  border: 1px solid #000000;
   background-color: transparent;
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
@@ -99,7 +99,8 @@
 
 .actions button:hover,
 .actions button:active {
-  background-color: #ffe2ed;
+  background-color: #000000;
+  color: #ffffff;
 }
 
 /* List view styles */
@@ -184,8 +185,8 @@
   font: inherit;
   cursor: pointer;
   color: white;
-  background-color: #77002e;
-  border: 1px solid #77002e;
+  background-color: #000000;
+  border: 1px solid #000000;
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
   transition: background-color 0.2s;
@@ -193,5 +194,5 @@
 
 .detailsButton:hover,
 .detailsButton:active {
-  background-color: #a30042;
+  background-color: #333333;
 }

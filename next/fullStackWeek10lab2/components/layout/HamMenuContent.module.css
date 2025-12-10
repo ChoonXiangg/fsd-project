@@ -14,6 +14,7 @@
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -23,6 +24,7 @@
     from {
         transform: translateX(-100%);
     }
+
     to {
         transform: translateX(0);
     }
@@ -37,9 +39,9 @@
     max-width: 320px;
     height: 100%;
     background: linear-gradient(180deg,
-        rgba(26, 41, 32, 0.98) 0%,
-        rgba(26, 41, 32, 0.95) 50%,
-        rgba(45, 67, 56, 0.95) 100%);
+            rgba(0, 0, 0, 0.98) 0%,
+            rgba(0, 0, 0, 0.95) 50%,
+            rgba(20, 20, 20, 0.95) 100%);
     backdrop-filter: blur(20px);
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
     overflow-y: auto;
@@ -74,14 +76,14 @@
     top: 0;
     width: 0;
     height: 100%;
-    background: linear-gradient(90deg, rgba(119, 0, 46, 0.3), transparent);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), transparent);
     transition: width 0.3s ease;
     z-index: -1;
 }
 
 .menuItem:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-left: 4px solid #77002e;
+    border-left: 4px solid #ffffff;
     padding-left: 2.5rem;
     transform: translateX(5px);
 }

@@ -64,11 +64,13 @@
 }
 
 .listingTypeBadge.forSale {
-    background-color: #2563eb; /* Blue for Sale */
+    background-color: #2563eb;
+    /* Blue for Sale */
 }
 
 .listingTypeBadge.forRent {
-    background-color: #f59e0b; /* Orange for Rent */
+    background-color: #f59e0b;
+    /* Orange for Rent */
 }
 
 .type {
@@ -80,7 +82,7 @@
 .price {
     font-size: 2rem;
     font-weight: bold;
-    color: #1a2920;
+    color: #000000;
     margin: 1rem 0;
 }
 
@@ -95,24 +97,24 @@
 .creatorInfo h3 {
     margin-top: 0;
     margin-bottom: 1rem;
-    color: #1a2920;
+    color: #000000;
     font-size: 1.3rem;
 }
 
 .listedBy {
     font-weight: bold;
-    color: #1a2920;
+    color: #000000;
     margin-bottom: 0.5rem;
 }
 
 .usernameLink {
-    color: #77002e;
+    color: #000000;
     cursor: pointer;
     text-decoration: underline;
 }
 
 .usernameLink:hover {
-    color: #a30042;
+    color: #333333;
 }
 
 .creatorInfo p {
@@ -121,7 +123,7 @@
 }
 
 .creatorInfo a {
-    color: #77002e;
+    color: #000000;
     text-decoration: none;
 }
 

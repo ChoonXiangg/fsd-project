@@ -14,7 +14,7 @@
   margin: 0;
   padding: 0;
   background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)),
-              url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+    url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -72,7 +72,7 @@
 .searchSelect:focus,
 .searchInput:focus,
 .searchPriceInput:focus {
-  border-color: #77002e;
+  border-color: #000000;
 }
 
 .searchSelect {
@@ -90,7 +90,7 @@
 
 .searchButton {
   padding: 0.9rem 2.5rem;
-  background-color: #1a2920;
+  background-color: #000000;
   color: white;
   border: none;
   border-radius: 4px;
@@ -101,7 +101,7 @@
 }
 
 .searchButton:hover {
-  background-color: #0f1810;
+  background-color: #333333;
 }
 
 .quickLinks {
@@ -125,7 +125,7 @@
 
 .quickLink:hover {
   background-color: white;
-  color: #1a2920;
+  color: #000000;
   transform: translateY(-2px);
 }
 
@@ -147,22 +147,22 @@
 }
 
 .actionButton {
-  background-color: #1a2920;
+  background-color: #000000;
   color: white;
 }
 
 .actionButton:hover {
-  background-color: #0f1810;
+  background-color: #333333;
   transform: translateY(-2px);
 }
 
 .actionButtonSecondary {
-  background-color: #77002e;
+  background-color: #000000;
   color: white;
 }
 
 .actionButtonSecondary:hover {
-  background-color: #a30042;
+  background-color: #333333;
   transform: translateY(-2px);
 }
 
