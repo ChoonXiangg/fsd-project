@@ -34,27 +34,26 @@ export default function HamMenuContent(props) {
         }
     }
 
-    let contentJsx = props.contents.map((item, index) => {
-        // Special handling for logout button
-        if (item.action === 'logout') {
-            return (
-                <div className={classes.logoutItem} key={index} onClick={handleLogout}>
-                    {item.title}
-                </div>
-            )
-        }
-        // Regular menu items
-        return (
-            <div className={classes.menuItem} key={index} onClick={() => clicked(item.webAddress)}>
-                {item.title}
-            </div>
-        )
-    })
+    // Filter content
+    const menuItems = props.contents.filter(item => item.action !== 'logout');
+    const logoutItem = props.contents.find(item => item.action === 'logout');
 
     return (
         <div className={classes.background} onClick={() => closeMe()} >
-            <div className={classes.mainContent} >
-                {contentJsx}
+            <div className={classes.mainContent} onClick={(e) => e.stopPropagation()}>
+                <div className={classes.menuList}>
+                    {menuItems.map((item, index) => (
+                        <div className={classes.menuItem} key={index} onClick={() => clicked(item.webAddress)}>
+                            {item.title}
+                        </div>
+                    ))}
+                </div>
+
+                {logoutItem && (
+                    <div className={classes.logoutItem} onClick={handleLogout}>
+                        {logoutItem.title}
+                    </div>
+                )}
             </div>
         </div>
     );

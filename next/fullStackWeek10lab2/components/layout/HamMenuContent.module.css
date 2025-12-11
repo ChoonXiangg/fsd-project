@@ -3,8 +3,8 @@
     top: 0;
     left: 0;
     z-index: 50;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3));
-    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
     width: 100%;
     height: 100%;
     animation: fadeIn 0.3s ease-out;
@@ -35,106 +35,106 @@
     top: 0;
     left: 0;
     z-index: 100;
-    width: 85%;
-    max-width: 320px;
+    width: 300px;
+    /* Adjusted width */
     height: 100%;
-    background: linear-gradient(180deg,
-            rgba(0, 0, 0, 0.98) 0%,
-            rgba(0, 0, 0, 0.95) 50%,
-            rgba(20, 20, 20, 0.95) 100%);
-    backdrop-filter: blur(20px);
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
-    overflow-y: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    padding: 2rem 0;
+    background: #ffffff;
+    /* White background */
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Push logout to bottom */
+    padding: 3rem 0 2rem 0;
+    /* Formatting padding */
+    animation: slideIn 0.3s ease-out;
 }
 
-.mainContent::-webkit-scrollbar {
-    display: none;
+.menuList {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    /* Spacing between items */
+    padding-top: 2rem;
 }
 
 .menuItem {
-    color: white;
-    padding: 1.2rem 2rem;
-    font-size: 1.1rem;
+    color: #000000;
+    padding: 0.8rem 2rem;
+    font-size: 1.3rem;
+    /* Same as Home/All Properties */
     font-weight: 500;
-    font-family: 'Lato', 'Open Sans', sans-serif;
-    letter-spacing: 0.3px;
+    font-family: 'Open Sans', sans-serif;
     cursor: pointer;
-    transition: all 0.3s ease;
-    border-left: 4px solid transparent;
     position: relative;
-    overflow: hidden;
+    width: fit-content;
+    /* Needed for underline width */
+    margin-left: 1rem;
+    /* Indentation */
+    transition: all 0.3s ease;
 }
 
-.menuItem::before {
+.menuItem::after {
     content: '';
     position: absolute;
-    left: 0;
-    top: 0;
+    bottom: 0.5rem;
+    /* Adjust position */
+    left: 2rem;
+    /* Match padding-left */
     width: 0;
-    height: 100%;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), transparent);
+    height: 2px;
+    background-color: #000000;
     transition: width 0.3s ease;
-    z-index: -1;
 }
 
-.menuItem:hover {
-    background: rgba(0, 0, 0, 0.1);
-    border-left: 4px solid #000000;
-    padding-left: 2.5rem;
-    transform: translateX(5px);
+.menuItem:hover::after {
+    width: calc(100% - 4rem);
+    /* Full width minus padding */
 }
 
-.menuItem:hover::before {
+/* Adjust hover to cover the text only, simpler approach */
+.menuItem {
+    padding: 0.5rem 0;
+    margin: 0 2rem;
+}
+
+.menuItem::after {
+    left: 0;
+    bottom: 0;
+}
+
+.menuItem:hover::after {
     width: 100%;
 }
 
-.menuItem:active {
-    transform: translateX(2px);
-}
 
 .logoutItem {
-    color: #ff6b6b;
-    padding: 1.2rem 2rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    font-family: 'Lato', 'Open Sans', sans-serif;
-    letter-spacing: 0.3px;
+    color: #000000;
+    /* Black text as requested */
+    padding: 0.5rem 0;
+    margin: 0 2rem 1rem 2rem;
+    /* Bottom margin */
+    font-size: 1.3rem;
+    font-weight: 500;
+    font-family: 'Open Sans', sans-serif;
     cursor: pointer;
-    transition: all 0.3s ease;
-    border-left: 4px solid transparent;
-    margin-top: 1rem;
     position: relative;
-    overflow: hidden;
+    width: fit-content;
 }
 
-.logoutItem::before {
+.logoutItem::after {
     content: '';
     position: absolute;
+    bottom: 0;
     left: 0;
-    top: 0;
     width: 0;
-    height: 100%;
-    background: linear-gradient(90deg, rgba(255, 107, 107, 0.2), transparent);
+    height: 2px;
+    background-color: #ff0000;
+    /* Red line for logout */
     transition: width 0.3s ease;
-    z-index: -1;
 }
 
-.logoutItem:hover {
-    background: rgba(255, 107, 107, 0.15);
-    border-left: 4px solid #ff6b6b;
-    padding-left: 2.5rem;
-    transform: translateX(5px);
-    color: #ff8787;
-}
-
-.logoutItem:hover::before {
+.logoutItem:hover::after {
     width: 100%;
-}
-
-.logoutItem:active {
-    transform: translateX(2px);
 }
