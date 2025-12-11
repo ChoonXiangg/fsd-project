@@ -33,7 +33,7 @@ function MainNavigation() {
   return (
     <header className={`${classes.header} ${classes.transparent} ${router.pathname !== '/' ? classes.blackNav : ''}`}>
       <HamMenuContent contents={contents} />
-      <HamMenu toggleMenuHide={() => toggleMenuHide()} />
+      <HamMenu toggleMenuHide={() => toggleMenuHide()} isBlack={router.pathname !== '/'} />
       <nav>
         <ul>
           <li>
@@ -98,7 +98,7 @@ function MainNavigation() {
       </nav>
       {globalCtx.theGlobalObject.user && (
         <div className={classes.userGreeting} onClick={() => router.push('/profile')}>
-          <span className={classes.userName}>Hi, {globalCtx.theGlobalObject.user.username}!</span>
+
           <div className={classes.userAvatar}>
             {globalCtx.theGlobalObject.user.profilePicture ? (
               <img src={globalCtx.theGlobalObject.user.profilePicture} alt={globalCtx.theGlobalObject.user.username} />

@@ -1,7 +1,8 @@
 import { useContext, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import GlobalContext from './store/globalContext';
-import classes from '../styles/Profile.module.css';
+import styles from '../styles/StandardPage.module.css';
+import classes from '../styles/Profile.module.css'; // Keeping specific profile styles but updating the CSS file later
 import { counties, cities } from '../data/irelandLocations';
 
 function ProfilePage() {
@@ -205,12 +206,18 @@ function ProfilePage() {
   };
 
   return (
-    <div className={classes.container}>
+    <div className={styles.container}>
+      <div className={styles.pageHeader}>
+        <div className={styles.headerContent}>
+          <h1 className={styles.pageTitle}>My Profile</h1>
+        </div>
+      </div>
+
       <div className={classes.profileCard}>
         <div className={classes.profileHeader}>
           <div className={classes.profilePicture}>
             <img
-              src={`https://ui-avatars.com/api/?name=${encodeURIComponent(isEditing ? editData.username : user.username)}&size=150&background=1a2920&color=fff&bold=true`}
+              src={`https://ui-avatars.com/api/?name=${encodeURIComponent(isEditing ? editData.username : user.username)}&size=150&background=000000&color=fff&bold=true`}
               alt={`${user.username}'s profile`}
             />
           </div>
@@ -285,12 +292,12 @@ function ProfilePage() {
       </div>
 
       {/* User's Listed Properties Section */}
-      <div className={classes.propertiesSection}>
-        <h2 className={classes.propertiesTitle}>My Listed Properties ({userProperties.length})</h2>
+      <div className={styles.resultsSection} style={{ marginTop: '3rem' }}>
+        <h2 className={styles.sectionTitle}>My Listed Properties ({userProperties.length})</h2>
         {userProperties.length === 0 ? (
           <p className={classes.noProperties}>You haven't listed any properties yet.</p>
         ) : (
-          <div className={classes.propertiesGrid}>
+          <div className={styles.grid}>
             {userProperties.map((property) => (
               <div
                 key={property._id}
@@ -335,12 +342,12 @@ function ProfilePage() {
       </div>
 
       {/* Starred Properties Section */}
-      <div className={classes.propertiesSection}>
-        <h2 className={classes.propertiesTitle}>⭐ Starred Properties</h2>
+      <div className={styles.resultsSection} style={{ marginTop: '3rem' }}>
+        <h2 className={styles.sectionTitle}>Starred Properties ({starredProperties.length})</h2>
         {starredProperties.length === 0 ? (
           <p className={classes.noProperties}>You haven't starred any properties yet.</p>
         ) : (
-          <div className={classes.propertiesGrid}>
+          <div className={styles.grid}>
             {starredProperties.map((property) => (
               <div
                 key={property._id}

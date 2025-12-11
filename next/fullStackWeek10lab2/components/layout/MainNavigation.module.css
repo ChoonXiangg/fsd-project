@@ -2,10 +2,10 @@
   width: 100%;
   height: 5rem;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   background-color: transparent;
-  padding: 0 10%;
+  padding: 0 10% 1.2rem 10%;
   position: relative;
   z-index: 100;
 }
@@ -23,7 +23,7 @@
   color: #000000 !important;
 }
 
-.blackNav a::after {
+.blackNav.header a::after {
   background-color: #000000;
 }
 
@@ -34,12 +34,11 @@
 }
 
 .blackNav .userGreeting {
-  background-color: rgba(0, 0, 0, 0.05);
+  /* background-color: rgba(0, 0, 0, 0.05); */
+  background-color: transparent;
 }
 
-.blackNav .userGreeting:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-}
+
 
 .blackNav .userName {
   color: #000000;
@@ -125,15 +124,17 @@
   gap: 0.5rem;
   margin-left: auto;
   text-decoration: none;
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 0.5rem;
-  border-radius: 25px;
-  transition: background-color 0.3s, transform 0.2s;
+  /* background-color: rgba(255, 255, 255, 0.1); */
+  /* padding: 0.5rem; */
+  /* border-radius: 25px; */
+  background-color: transparent;
+  padding: 0;
+  transition: transform 0.2s;
   cursor: pointer;
 }
 
 .userGreeting:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  /* background-color: rgba(255, 255, 255, 0.2); */
   transform: translateY(-2px);
 }
 
