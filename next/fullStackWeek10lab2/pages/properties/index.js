@@ -109,10 +109,11 @@ function AllPropertiesPage() {
         setFilterCounty('');
         setFilterTimeAdded('');
         setFilterSearch('');
+        setActiveTab('All'); // Reset tab to All
         router.push('/properties', undefined, { shallow: true });
     };
 
-    const [activeTab, setActiveTab] = useState('Buy');
+    const [activeTab, setActiveTab] = useState('All');
 
     // Update filters based on active tab
     useEffect(() => {
@@ -125,6 +126,9 @@ function AllPropertiesPage() {
         } else if (activeTab === 'Commercial properties') {
             setFilterType('Commercial');
             setFilterListingType('');
+        } else if (activeTab === 'All') {
+            setFilterListingType('');
+            setFilterType('');
         } else {
             // New developments or other
             setFilterListingType('');
@@ -152,7 +156,7 @@ function AllPropertiesPage() {
             <div className={styles.filterContainer}>
                 {/* Tabs */}
                 <div className={styles.tabs}>
-                    {['Buy', 'Rent', 'New developments', 'Commercial properties'].map(tab => (
+                    {['All', 'Buy', 'Rent', 'New developments', 'Commercial properties'].map(tab => (
                         <button
                             key={tab}
                             className={`${styles.tab} ${activeTab === tab ? styles.activeTab : ''}`}

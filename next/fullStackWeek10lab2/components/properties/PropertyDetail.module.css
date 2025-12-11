@@ -1,20 +1,70 @@
+/* Main Container: 2-Column Grid */
 .detail {
-    text-align: center;
-    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: stretch;
+    /* Stretch to match heights */
+    margin-top: 5rem;
+    padding: 0 2rem;
 }
 
+/* Left Column: Image */
+.mainImage {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    max-height: 600px;
+    object-fit: cover;
+    border-radius: 0;
+    display: block;
+}
+
+/* Right Column: Details Box */
+.detailsContainer {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 0;
+    box-shadow: none;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    /* Prevent stretching */
+}
+
+/* Title Row */
+/* Title Row */
 .titleRow {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    /* Keep items together */
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    /* Center alignment */
+    gap: 1.5rem;
+    /* Space between title and star */
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
 }
 
+.titleRow h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #000000;
+    line-height: 1.2;
+}
+
+/* Star Button */
 .starButton {
     background: none;
     border: none;
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     cursor: pointer;
     color: #ccc;
     transition: color 0.2s, transform 0.2s;
@@ -23,7 +73,7 @@
 }
 
 .starButton:hover:not(:disabled) {
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 
 .starButton.starred {
@@ -35,82 +85,108 @@
     cursor: not-allowed;
 }
 
-.detail img {
-    width: 100%;
-    max-height: 500px;
-    object-fit: contain;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-}
-
+/* Badges */
 .verifiedBadge {
-    background-color: #10b981;
+    background-color: #000000;
     color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0;
     display: inline-block;
-    font-weight: bold;
-    margin: 0.5rem 0;
+    font-weight: 600;
+    margin: 0.5rem 0.5rem 0.5rem 0;
+    font-size: 0.85rem;
 }
 
 .listingTypeBadge {
     color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0;
     display: inline-block;
-    font-weight: bold;
+    font-weight: 600;
     margin: 0.5rem 0;
-    font-size: 1rem;
+    font-size: 0.85rem;
 }
 
 .listingTypeBadge.forSale {
-    background-color: #2563eb;
-    /* Blue for Sale */
+    background-color: #000000;
 }
 
 .listingTypeBadge.forRent {
     background-color: #f59e0b;
-    /* Orange for Rent */
 }
 
+/* Details Text */
 .type {
     color: #666;
-    font-size: 1.1rem;
-    margin: 0.5rem 0;
+    font-size: 1rem;
+    margin: 0.5rem 0 0.25rem 0;
+    font-weight: 500;
+}
+
+.addressText {
+    font-style: normal;
+    color: #333;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .price {
     font-size: 2rem;
-    font-weight: bold;
+    font-weight: 700;
     color: #000000;
-    margin: 1rem 0;
+    margin: 0.5rem 0 1rem 0;
 }
 
+/* Attributes Grid */
+.attributesGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.attributeItem {
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.attributeLabel {
+    font-weight: 600;
+    color: #000000;
+}
+
+/* Creator Info Box */
 .creatorInfo {
-    margin-top: 2rem;
-    padding: 1.5rem;
-    background-color: #f9fafb;
-    border-radius: 8px;
-    text-align: left;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+    background-color: transparent;
+    padding-left: 0;
+    border-radius: 0;
 }
 
 .creatorInfo h3 {
     margin-top: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     color: #000000;
-    font-size: 1.3rem;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .listedBy {
-    font-weight: bold;
+    font-weight: 500;
     color: #000000;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
+    font-size: 0.95rem;
 }
 
 .usernameLink {
     color: #000000;
     cursor: pointer;
     text-decoration: underline;
+    font-weight: 700;
 }
 
 .usernameLink:hover {
@@ -118,15 +194,30 @@
 }
 
 .creatorInfo p {
-    margin: 0.5rem 0;
+    margin: 0.25rem 0;
     color: #4b5563;
+    font-size: 0.95rem;
 }
 
 .creatorInfo a {
     color: #000000;
     text-decoration: none;
+    font-weight: 500;
 }
 
 .creatorInfo a:hover {
     text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .detail {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .mainImage {
+        max-height: 400px;
+    }
 }

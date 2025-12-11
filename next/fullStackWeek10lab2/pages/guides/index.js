@@ -45,44 +45,48 @@ function GuidesPage() {
                         <p style={{ marginTop: '0.5rem', color: '#666', fontSize: '1.1rem' }}>Expert advice for every step of your property journey.</p>
                     </div>
                     <div className={styles.headerDescription}>
-                        {globalCtx.theGlobalObject.user && globalCtx.theGlobalObject.user.isVerifiedAgent && (
-                            <div style={{ marginTop: '1rem' }}>
-                                <Link href="/guides/add">
-                                    <a style={{
-                                        display: 'inline-block',
-                                        padding: '0.8rem 1.5rem',
-                                        backgroundColor: '#000000',
-                                        color: 'white',
-                                        textDecoration: 'none',
-                                        borderRadius: '4px',
-                                        fontWeight: 'bold'
-                                    }}>
-                                        + Write New Guide
-                                    </a>
-                                </Link>
-                            </div>
-                        )}
                     </div>
                 </div>
             </div>
 
-            {/* Categories Section - Buttons */}
-            <div className={styles.tabs}>
-                <button
-                    onClick={() => setSelectedCategory('All')}
-                    className={`${styles.tab} ${selectedCategory === 'All' ? styles.activeTab : ''}`}
-                >
-                    All Categories
-                </button>
-                {guideCategories.map(category => (
+            {/* Categories and Action Section */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                <div className={styles.tabs} style={{ marginBottom: 0 }}>
                     <button
-                        key={category.id}
-                        onClick={() => setSelectedCategory(category.title)}
-                        className={`${styles.tab} ${selectedCategory === category.title ? styles.activeTab : ''}`}
+                        onClick={() => setSelectedCategory('All')}
+                        className={`${styles.tab} ${selectedCategory === 'All' ? styles.activeTab : ''}`}
                     >
-                        {category.title}
+                        All Categories
                     </button>
-                ))}
+                    {guideCategories.map(category => (
+                        <button
+                            key={category.id}
+                            onClick={() => setSelectedCategory(category.title)}
+                            className={`${styles.tab} ${selectedCategory === category.title ? styles.activeTab : ''}`}
+                        >
+                            {category.title}
+                        </button>
+                    ))}
+                </div>
+
+                {globalCtx.theGlobalObject.user && (globalCtx.theGlobalObject.user.verifiedAgent || globalCtx.theGlobalObject.user.isVerifiedAgent) && (
+                    <div style={{ marginBottom: '0.5rem' }}> {/* Slight adjustment to match button margin/padding visual */}
+                        <Link href="/guides/add">
+                            <a style={{
+                                display: 'inline-block',
+                                padding: '0.8rem 1.5rem',
+                                backgroundColor: '#000000',
+                                color: 'white',
+                                textDecoration: 'none',
+                                borderRadius: '4px',
+                                fontWeight: 'bold',
+                                whiteSpace: 'nowrap'
+                            }}>
+                                + Write New Guide
+                            </a>
+                        </Link>
+                    </div>
+                )}
             </div>
 
             {/* Guides Section */}
