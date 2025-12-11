@@ -21,7 +21,7 @@ function GuideDetailPage() {
     }
 
     return (
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem', marginTop: '4rem' }}>
             <button
                 onClick={() => router.back()}
                 style={{ marginBottom: '1rem', background: 'none', border: 'none', color: '#666', cursor: 'pointer' }}

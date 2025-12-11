@@ -6,11 +6,13 @@
   background-color: #ffffff;
   border-radius: 0;
   overflow: hidden;
+  position: relative;
 }
 
 .image {
   width: 100%;
-  padding-top: 100%; /* Square aspect ratio */
+  padding-top: 100%;
+  /* Square aspect ratio */
   overflow: hidden;
   border-radius: 0;
   position: relative;
@@ -210,4 +212,18 @@
 .detailsButton:hover,
 .detailsButton:active {
   background-color: #333333;
+}
+
+.verifiedLabel {
+  position: static;
+  margin-left: auto;
+  font-size: 0.85rem;
+  /* Match detailItem */
+  color: #666666;
+  /* Match detailItem */
+  font-family: 'Open Sans', sans-serif;
+  border-top: none;
+  padding-top: 0;
+  font-weight: normal;
+  /* Match detailItem */
 }

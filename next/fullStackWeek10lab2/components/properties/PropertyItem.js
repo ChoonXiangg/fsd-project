@@ -70,6 +70,11 @@ function PropertyItem(props) {
               {props.bedrooms} rooms
             </span>
           )}
+          {props.verifiedAgent && (
+            <span className={classes.verifiedLabel}>
+              Verified Agent
+            </span>
+          )}
         </div>
       </div>
     </li>

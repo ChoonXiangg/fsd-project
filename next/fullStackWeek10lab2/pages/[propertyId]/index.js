@@ -2,6 +2,7 @@ import PropertyDetail from '../../components/properties/PropertyDetail'
 import { useRouter } from 'next/router'
 import GlobalContext from "../../pages/store/globalContext"
 import { useContext } from 'react'
+import styles from '../../styles/StandardPage.module.css'
 
 export default function () {
     const globalCtx = useContext(GlobalContext)
@@ -34,5 +35,17 @@ export default function () {
             />
         }
     }
-    return returnVal
+
+    // Wrap the result in the standard container if found
+    if (returnVal) {
+        return (
+            <div className={styles.container}>
+                <div style={{ marginTop: '2rem' }}> {/* Spacer for navbar */}
+                    {returnVal}
+                </div>
+            </div>
+        )
+    }
+
+    return null
 }
